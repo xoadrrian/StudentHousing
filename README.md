@@ -1,1 +1,1 @@
-This is our GitHub repo for our group project about managing student housing
+This is the EN11 group 1 GitHub repo for our project (Student Housing BV case)
