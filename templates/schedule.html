@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BV Housing_Schedule</title>
+   <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo">
+            <h1>BV Housing</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Chores &amp; Supplies</a></li>
+                <li><a href="#">My Reports</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Welcome Banner & Personal Tasks -->
+        <section>
+            <h2>Welcome back, !</h2>
+            <p>Here are your current tasks:</p>
+
+            <!-- Personal Task Card -->
+            <div>
+                <!-- To Buy Section -->
+                <article>
+                    <header>
+                        <h3>To Buy:</h3>
+                    </header>
+                    <div>
+                        <span></span>
+                        <button type="button">[Mark as Bought]</button>
+                    </div>
+                </article>
+
+                <!-- To Do Section -->
+                <article>
+                    <header>
+                        <h3>To Do:</h3>
+                        <span>Due:</span>
+                    </header>
+                    <div>
+                        <span></span>
+                        <button type="button">[Mark as Done]</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Shared Supplies and Chores Grid -->
+        <section>
+
+            <!-- Shared Supplies Card -->
+            <article>
+                <header>
+                    <h2>Shared Supplies</h2>
+                    <button type="button">+ Add Item</button>
+                </header>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">ITEM</th>
+                            <th scope="col">RESPONSIBLE</th>
+                            <th scope="col">STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows will be dynamically populated -->
+                    </tbody>
+                </table>
+            </article>
+
+            <!-- Shared Chores Card -->
+            <article>
+                <header>
+                    <h2>Shared Chores</h2>
+                    <button type="button">+ Add Chore</button>
+                </header>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">CHORE TASK</th>
+                            <th scope="col">DUE TO</th>
+                            <th scope="col">TENANT</th>
+                            <th scope="col">STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows will be dynamically populated -->
+                    </tbody>
+                </table>
+            </article>
+
+        </section>
+
+    </main>
+
+</body>
+</html>
