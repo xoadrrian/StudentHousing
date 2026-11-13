@@ -1,0 +1,158 @@
+
+/* My Tickets Page */
+/* Reset & Base Typography (Matching Dashboard & Login) */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #e4eaf2;
+  color: #2c4c76;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #2e4e78;
+  color: #ffffff;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 48px;
+}
+
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.nav-link:hover {
+  opacity: 1;
+}
+
+.nav-link.active {
+  font-weight: 700;
+  opacity: 1;
+}
+
+/* Main Reports Layout */
+.reports-container {
+  flex: 1;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 72px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Category Headers & Divider */
+.reports-board {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.reports-headers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid #cbd3de;
+  padding-bottom: 14px;
+}
+
+.category-header {
+  text-align: center;
+}
+
+.category-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c4c76;
+}
+
+/* Two Columns for Report Items */
+.reports-columns {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  padding-top: 20px;
+}
+
+.report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Bottom Centered "+ New report" Button */
+.reports-footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 36px;
+}
+
+.btn-new-report {
+  background-color: #2e4e78;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 28px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-new-report:hover {
+  background-color: #243f63;
+}
+
+.btn-new-report:active {
+  transform: translateY(1px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 720px) {
+  .reports-headers,
+  .reports-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .reports-headers {
+    gap: 12px;
+  }
+}

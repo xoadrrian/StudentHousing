@@ -1,48 +1,48 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BV Housing_LogIn</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BV Housing - Log In</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-
-
 <body>
 
-  <!-- LEFT PANEL/ INTRO SECTION -->
-  <div class="introPanel">
-    <h2>Welcome to</h2>
-    <h1>BV Housing</h1>
-    <p>Sign In to keep track of your tasks</p>
+  <div class="login-layout">
+    
+    <!-- Left Branding Panel -->
+    <aside class="brand-panel">
+      <div class="brand-content">
+        <p class="welcome-label">Welcome to</p>
+        <h1 class="brand-title">BV Housing</h1>
+        <p class="brand-subtitle">Sign In to keep track of your tasks</p>
+      </div>
+    </aside>
+
+    <!-- Right Form Panel -->
+    <main class="form-panel">
+      <div class="login-card">
+        <div class="login-card-header">
+          <h2>Log In</h2>
+        </div>
+
+        <form class="login-form" id="login-form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+
+          <button type="submit" class="btn-login">Log In</button>
+        </form>
+      </div>
+    </main>
+
   </div>
-  
-  
-   <!-- RIGHT PANEL/ LOGIN SECTION -->
-  <div class="loginPanel">
 
-    <header>
-      <h1>Log In</h1>
-    </header>
-
-      <div>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
-      </div>
-
-      <div>
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-      </div>
-
-    <!-- LOGIN BUTTON -->
-      <button class="loginBtn">Log In</button>
-
-  </div> 
-
-
-
-    <script src="index.js"></script>
-  </body>
+</body>
 </html>
