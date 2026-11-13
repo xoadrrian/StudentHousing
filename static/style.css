@@ -270,6 +270,13 @@ body {
   margin-left: 2px;
 }
 
+.subtitle2 {
+  font-size: 0.95rem;
+  color: #2c4c76;
+  margin-left: 2px;
+  margin-bottom: 15px;
+}
+
 /* Shared Card Styling */
 .card {
   background-color: #ffffff;
