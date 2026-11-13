@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BV Housing - My Reports</title>
-  <link rel="stylesheet" href="myTickets.css" />
+  <title>BV Housing - My Tickets</title>
+  <link rel="stylesheet" href="../static/myTickets.css" />
 </head>
 <body>
 
@@ -13,8 +13,8 @@
     <div class="nav-container">
       <div class="brand">BV Housing</div>
       <nav class="nav-links">
-        <a href="schedule.html" class="nav-link">Chores &amp; Supplies</a>
-        <a href="myTickets.html" class="nav-link active">My Reports</a>
+        <a href="schedule.html" class="nav-link">Home</a>
+        <a href="myTickets.html" class="nav-link active">My Tickets</a>
       </nav>
     </div>
   </header>
@@ -26,10 +26,10 @@
     <section class="reports-board">
       <div class="reports-headers">
         <div class="category-header">
-          <h2>Maintenance</h2>
+          <h2>Repair Request</h2>
         </div>
         <div class="category-header">
-          <h2>Community &amp; House Rules</h2>
+          <h2>Community Complaints</h2>
         </div>
       </div>
 
@@ -45,7 +45,9 @@
 
     <!-- Bottom Action Button -->
     <div class="reports-footer">
-      <button type="button" class="btn-new-report" id="btn-new-report">+ New report</button>
+      <button type="button" class="btn-new-report" id="btn-new-report" onclick="window.location.href='ticketForm1.html'">
+  + New report
+</button>
     </div>
 
   </main>
