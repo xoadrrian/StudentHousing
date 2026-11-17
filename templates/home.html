@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BV Housing - Home</title>
+  <link rel="stylesheet" href="../static/style.css" />
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">BV Housing</div>
+
+      <nav class="nav-links">
+        <a href="home.html" class="nav-link active">Home</a>
+        <a href="myTickets.html" class="nav-link">My Tickets</a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Main Dashboard Content -->
+  <main class="main-container">
+    
+    <!-- Greeting Header -->
+    <section class="welcome-section">
+      <h1>Welcome back, <span id="user-name"></span>!</h1>
+      <p class="subtitle">Your current tasks:</p>
+    </section>
+
+    <!-- Top Summary Card (To Buy & To Do) -->
+    <section class="card summary-card">
+
+      <!-- Left Column: To Buy -->
+      <div class="summary-col">
+        <div class="summary-header">
+          <h2>To Buy:</h2>
+        </div>
+
+        <div class="summary-body" id="to-buy-list">
+          <!-- JS will populate user's items to buy here -->
+        </div>
+
+        <div class="summary-footer">
+          <button type="button" class="btn-action" id="btn-mark-bought">[Mark as Bought]</button>
+        </div>
+      </div>
+
+      <!-- Vertical Divider -->
+      <div class="vertical-divider"></div>
+
+      <!-- Right Column: To Do -->
+      <div class="summary-col">
+        <div class="summary-header">
+          <h2>To Do:</h2>
+          <span class="due-label">Due:</span>
+        </div>
+
+        <div class="summary-body" id="to-do-list">
+          <!-- JS will populate user's chores to do here -->
+        </div>
+
+        <div class="summary-footer">
+          <button type="button" class="btn-action" id="btn-mark-done">[Mark as Done]</button>
+        </div>
+      </div>
+    </section>
+
+    <p class="subtitle2">Shared household tasks:</p>
+
+    <!-- Bottom Shared Columns -->
+    <div class="bottom-grid">
+      
+      <!-- Shared Supplies Cards -->
+      <section class="card panel-card">
+
+        <div class="panel-header">
+          <h2>Shared Supplies</h2>
+          <button type="button" class="btn-add" id="btn-add-item">+ Add Item</button>
+        </div>
+
+        <div class="supplies-table-header">
+          <span>ITEM</span>
+          <span>RESPONSIBLE</span>
+          <span>STATUS</span>
+        </div>
+
+        <div class="panel-content" id="shared-supplies-list">
+          <!-- JS will populate shared supplies rows here -->
+        </div>
+      </section>
+
+      <!-- Shared Chores Card -->
+      <section class="card panel-card">
+
+        <div class="panel-header">
+          <h2>Shared Chores</h2>
+          <button type="button" class="btn-add" id="btn-add-chore">+ Add Chore</button>
+        </div>
+
+        <!-- 7-Day calendar-->
+        <div class="week-selector" id="week-selector">
+          <button type="button" class="day-item" data-day="MO">
+            <span class="day-name">MO</span>
+            <span class="day-number"></span>
+          </button>
+          <button type="button" class="day-item" data-day="TU">
+            <span class="day-name">TU</span>
+            <span class="day-number"></span>
+          </button>
+          <button type="button" class="day-item" data-day="WE">
+            <span class="day-name">WE</span>
+            <span class="day-number"></span>
+          </button>
+          <button type="button" class="day-item" data-day="TH">
+            <span class="day-name">TH</span>
+            <span class="day-number"></span>
+          </button>
+          <button type="button" class="day-item" data-day="FR">
+            <span class="day-name">FR</span>
+            <span class="day-number"></span>
+          </button>
+          <button type="button" class="day-item" data-day="SA">
+            <span class="day-name">SA</span>
+            <span class="day-number"></span>
+          </button>
+          <button type="button" class="day-item" data-day="SU">
+            <span class="day-name">SU</span>
+            <span class="day-number"></span>
+          </button>
+        </div>
+
+        <!-- Tasks for Selected Day -->
+        <div class="panel-content" id="chore-tasks-container">
+          <!-- JS will populate tasks for the selected day here -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+</body>
+</html>
