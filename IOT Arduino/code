@@ -1,0 +1,93 @@
+#include <WiFi.h>
+#include <PubSubClient.h>
+#include <Wire.h>
+#include <SensirionI2cScd4x.h>
+
+const char* SSID  = "Username_Host";
+const char* PASS  = "Password_Host";
+const char* PI_IP = "IP_address_here";
+
+const int RED = 27, YEL = 26, GRN = 25, WHT = 33, HEAT = 32, PIR = 14, LDR = 34;
+const int DARK = 700;
+const unsigned long READ_MS = 3000;
+
+WiFiClient net; PubSubClient mqtt(net); SensirionI2cScd4x scd;
+
+uint16_t co2 = 0; float temp = 0, hum = 0, setpoint = 21, target = 21;
+bool present = false, lightOn = false, heating = false;
+unsigned long lastMotion = 0, lastRead = 0, lastStatus = 0, lastTry = 0, lastOk = 0;
+int ldr = 0;
+
+void onMsg(char* t, byte* p, unsigned int n) {
+  String s; for (unsigned i = 0; i < n; i++) s += (char)p[i];
+  if (s.toFloat() > 0) setpoint = s.toFloat();
+}
+
+void startScd() {
+  scd.stopPeriodicMeasurement(); delay(500);
+  scd.startPeriodicMeasurement();
+}
+
+void setup() {
+  Serial.begin(115200);
+  for (int p : {RED, YEL, GRN, WHT, HEAT}) pinMode(p, OUTPUT);
+  pinMode(PIR, INPUT);
+  Wire.begin(21, 22);
+  scd.begin(Wire, SCD41_I2C_ADDR_62);
+  startScd();
+  WiFi.begin(SSID, PASS);
+  mqtt.setServer(PI_IP, 1883);
+  mqtt.setBufferSize(512);
+  mqtt.setCallback(onMsg);
+}
+
+void loop() {
+  unsigned long now = millis();
+
+  if (WiFi.status() == WL_CONNECTED) {
+    if (!mqtt.connected() && now - lastTry > 5000) {
+      lastTry = now;
+      if (mqtt.connect("esp32-house7")) mqtt.subscribe("house/7/kitchen/setpoint");
+    }
+    mqtt.loop();
+  }
+
+  // White light: on when motion + dark, off when bright or empty 30 s
+  if (digitalRead(PIR)) lastMotion = now;
+  present = lastMotion && now - lastMotion < 30000;
+  ldr = analogRead(LDR);
+  if (!present || ldr > DARK + 300) lightOn = false;
+  else if (ldr < DARK) lightOn = true;
+  digitalWrite(WHT, lightOn);
+
+  // Heater LED: 18.5 after 15 min empty
+  target = (now - lastMotion > 900000) ? 18.5 : setpoint;
+  heating = temp > 0 && temp < target;
+  digitalWrite(HEAT, heating);
+
+  // SCD40 every 3 s, restart if stuck 30 s
+  if (now - lastRead >= READ_MS) {
+    lastRead = now;
+    uint16_t c; float t, h; bool ready = false;
+    scd.getDataReadyStatus(ready);
+    if (ready && scd.readMeasurement(c, t, h) == 0 && c) { co2 = c; temp = t; hum = h; lastOk = now; }
+    else if (now - lastOk > 30000) { startScd(); lastOk = now; Serial.println("SCD40 restarted"); }
+
+    digitalWrite(GRN, co2 && co2 < 800);
+    digitalWrite(YEL, co2 >= 800 && co2 <= 1200);
+    digitalWrite(RED, co2 > 1200);
+
+    char msg[200];
+    snprintf(msg, sizeof msg,
+      "{\"co2\":%u,\"temp\":%.1f,\"hum\":%.1f,\"presence\":%s,\"heating\":%s,\"target\":%.1f,\"light\":%s}",
+      co2, temp, hum, present ? "true" : "false", heating ? "true" : "false", target, lightOn ? "true" : "false");
+    if (mqtt.connected()) mqtt.publish("house/7/kitchen/climate", msg);
+  }
+
+  if (now - lastStatus >= 5000) {
+    lastStatus = now;
+    Serial.printf("WiFi %s | MQTT %s | CO2 %u | light %d | PIR %d\n",
+      WiFi.status() == WL_CONNECTED ? "OK" : "--", mqtt.connected() ? "OK" : "--",
+      co2, ldr, digitalRead(PIR));
+  }
+}
