@@ -6,7 +6,7 @@ presence in a room and shows it on a touch screen and on the group website.
 ## How it works
 ESP32 → MQTT → Raspberry Pi (Mosquitto) → touch screen dashboard
                                         → logger.py → SQLite + API
-                                        → EMQX cloud (bv/node1/readings) → website
+                                        → EMQX cloud (bv/rooms/1/readings) → website
 
 ## Hardware
 - ESP32 dev board
@@ -28,6 +28,7 @@ ESP32 → MQTT → Raspberry Pi (Mosquitto) → touch screen dashboard
 | `arduino/sens/sens.ino` | ESP32 code |
 | `pi/logger.py` | Saves readings in SQLite, API on port 5000, forwards to EMQX |
 | `pi/dashboard.html` | Touch screen dashboard (MQTT over WebSockets, port 9001) |
+| `pi/mqtt.min.js` | MQTT library used by the dashboard (works offline) |
 
 ## Setup
 **ESP32**
@@ -38,17 +39,17 @@ ESP32 → MQTT → Raspberry Pi (Mosquitto) → touch screen dashboard
 **Raspberry Pi**
 1. `sudo apt install -y mosquitto python3-flask python3-paho-mqtt`
 2. Mosquitto: listener 1883 (anonymous) and listener 9001 (websockets).
-3. Copy `logger.py` and `dashboard.html` to `/home/miraik/`.
+3. Copy the `pi/` files to the Pi's home folder (`~/`).
 4. Fill in the EMQX host, username and password in `logger.py`.
-5. Autostart: `crontab -e` → `@reboot sleep 20 && python3 /home/miraik/logger.py`
-6. Kiosk: `~/.config/labwc/autostart` → `/usr/bin/chromium --kiosk --incognito file:///home/miraik/dashboard.html &`
+5. Autostart: `crontab -e` → `@reboot sleep 20 && python3 ~/logger.py`
+6. Kiosk: `~/.config/labwc/autostart` → `/usr/bin/chromium --kiosk --incognito file:///home/<pi-user>/dashboard.html &`
 
 ## API (on the Pi)
 - `GET http://<pi-ip>:5000/api/latest` – newest reading
 - `GET http://<pi-ip>:5000/api/history?hours=24` – readings of the last 24 h
 
 ## Cloud message format
-Topic `bv/node1/readings`, every 30 s:
+Topic `bv/rooms/1/readings`, every 30 s:
 ```json
 {"co2": 615, "temp": 22.7, "humidity": 34.4}
 ```
