@@ -182,8 +182,7 @@ body {
 
 
 
-/* SCHEDULING PAGE */
-/* Reset & Base Typography */
+/* HOME PAGE */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -243,6 +242,7 @@ body {
 .nav-link.active {
   font-weight: 700;
   opacity: 1;
+  text-decoration: underline;
 }
 
 /* Main Container */

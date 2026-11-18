@@ -1,0 +1,233 @@
+/* Base Reset & Colors (Matches style.css) */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #e4eaf2;
+  color: #2c4c76;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #2e4e78;
+  color: #ffffff;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 48px;
+}
+
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  opacity: 1;
+}
+
+.nav-link.active {
+  font-weight: 700;
+}
+
+/* Main Two-Column Grid */
+.details-container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 46px auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1.75fr 1fr;
+  gap: 36px;
+  align-items: stretch;
+}
+
+/* Shared Card Shadow */
+.card {
+  background-color: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.14);
+}
+
+/* Left Card: Ticket Details */
+.details-card {
+  border-radius: 14px;
+  padding: 28px 36px 36px;
+  min-height: 430px;
+  display: flex;
+  flex-direction: column;
+}
+
+.details-header {
+  border-bottom: 1px solid #d5dce4;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  margin-right: 24px;
+}
+
+.details-header h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #9ba3ae;
+  padding-left: 8px;
+}
+
+.details-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 8px;
+}
+
+.detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #9ba3ae;
+}
+
+.detail-value {
+  font-size: 0.98rem;
+  color: #2c4c76;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.ticket-attachment {
+  max-width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #d5dce4;
+  margin-top: 4px;
+}
+
+/* Right Card: Chat Panel */
+.chat-card {
+  border-radius: 2px;
+  min-height: 430px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-header {
+  height: 52px;
+  background-color: #f3f3f3;
+  border-bottom: 1px solid #e6e8ec;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2c4c76;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 16px 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-input-area {
+  padding: 14px 18px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-input-area input {
+  flex: 1;
+  height: 36px;
+  padding: 6px 14px;
+  background-color: #efefef;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: #2c4c76;
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.chat-input-area input::placeholder {
+  color: #a6acb4;
+}
+
+.chat-input-area input:focus {
+  background-color: #ffffff;
+  border-color: #2e4e78;
+}
+
+.btn-send {
+  background: none;
+  border: none;
+  color: #cccccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-send:hover {
+  color: #2e4e78;
+}
+
+.btn-send:active {
+  transform: translateY(1px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 840px) {
+  .details-container {
+    grid-template-columns: 1fr;
+  }
+}
