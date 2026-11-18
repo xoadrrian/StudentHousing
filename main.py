@@ -1,5 +1,8 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi import Request
+from fastapi.templating import Jinja2Templates
 
 import mqtt_listener
 
@@ -13,8 +16,33 @@ async def lifespan(app):
 
 
 app = FastAPI(lifespan=lifespan)
-
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.get("/home")
+def home_page(request: Request):
+    return templates.TemplateResponse(request, "home.html")
+
+@app.get("/myTickets")
+def myTickets_page(request: Request):
+    return templates.TemplateResponse(request, "myTickets.html")
+
+@app.get("/")
+def login_page(request: Request):
+    return templates.TemplateResponse(request, "login.html")
+
+@app.get("/addItem")
+def addItem_page(request: Request):
+    return templates.TemplateResponse(request, "addItem.html")
+
+@app.get("/communityComplaint")
+def communityComplaint_page(request: Request):
+    return templates.TemplateResponse(request, "communityComplaint.html")
+
+@app.get("/repairTicket")
+def repairTicket_page(request: Request):
+    return templates.TemplateResponse(request, "repairTicket.html")
