@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BV Housing - Add Item</title>
+  <link rel="stylesheet" href="../static/addItem.css" />
+</head>
+<body>
+
+  <!-- Top Navigation Bar (Matches home.html) -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">BV Housing</div>
+      <nav class="nav-links">
+        <a href="home.html" class="nav-link active">Home</a>
+        <a href="myTickets.html" class="nav-link">My Tickets</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-container">
+    <a href="home.html" class="back-link">&larr; Back</a>
+
+    <section class="card form-card">
+      <div class="form-header">
+        <h2>Add Item</h2>
+      </div>
+
+      <form id="add-item-form">
+        <!-- Item Title -->
+        <div class="form-group">
+          <label for="supply-title">Title</label>
+          <input type="text" id="supply-title" name="title" required />
+        </div>
+
+        <!-- Assign Tenants (Compact Pill Grid) -->
+        <div class="form-group">
+          <div class="label-row">
+            <label>Assigned Tenants</label>
+            <button type="button" class="text-btn" id="btn-select-all">[Select All]</button>
+          </div>
+
+          <!-- JS will populate tenant pills here -->
+          <div class="tenant-grid" id="tenant-pills-container">
+            <!-- Example of what JS inserts:
+            <label class="tenant-pill">
+              <input type="checkbox" name="tenants" value="1" />
+              <span>Alex</span>
+            </label>
+            -->
+          </div>
+        </div>
+
+        <!-- Bottom Buttons -->
+        <div class="form-footer">
+          <a href="home.html" class="cancel-link">[Cancel]</a>
+          <button type="submit" class="btn-submit">+ Add Item</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+</body>
+</html>

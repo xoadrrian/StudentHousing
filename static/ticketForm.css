@@ -1,4 +1,4 @@
-/* Reset & Base Typography */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -39,7 +39,7 @@ body {
   letter-spacing: 0.2px;
 }
 
-.nav-links {
+/*.nav-links {
   display: flex;
   gap: 48px;
 }
@@ -60,7 +60,7 @@ body {
 .nav-link.active {
   font-weight: 700;
   opacity: 1;
-}
+}*/
 
 /* Main Ticket View Layout */
 .ticket-view {
@@ -188,7 +188,7 @@ body {
   border-color: #2e4e78;
 }
 
-/* Import Image (ticketForm1.html) */
+/* Import Image */
 .image-upload-group {
   margin-top: 2px;
 }
