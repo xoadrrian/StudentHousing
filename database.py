@@ -5,8 +5,14 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 load_dotenv()
 
-engine = create_engine(os.getenv("DATABASE_URL"), pool_pre_ping=True)
-SessionLocal = sessionmaker(bind=engine, autoflush=False)
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./studenthousing.db")
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    connect_args=connect_args,
+)
+SessionLocal = sessionmaker(autocommit=False, bind=engine, autoflush=False)
 
 
 class Base(DeclarativeBase):
