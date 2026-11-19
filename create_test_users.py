@@ -1,8 +1,3 @@
-"""
-Creates one test account per role, with names from the case data.
-Run once:  python create_test_users.py
-Password for all three: Test1234!   (test accounts only, never real ones)
-"""
 from sqlalchemy import select
 
 from database import SessionLocal, engine

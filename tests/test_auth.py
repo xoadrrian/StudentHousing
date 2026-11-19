@@ -1,11 +1,3 @@
-"""
-Tests for login, logout and role checks (routers/auth.py).
-
-Run from the project folder:   python -m pytest -v
-
-Each test gets a fresh, empty database that lives only in memory, so tests
-never touch local.db or Supabase and can't affect each other.
-"""
 import base64
 import json
 
@@ -24,7 +16,6 @@ from routers.auth import COOKIE_NAME, hash_password, require_role
 PASSWORD = "Test1234!"
 
 
-# A fake protected page, only for testing require_role.
 @app.get("/test-manager-only")
 def manager_only(user: User = Depends(require_role(Role.manager))):
     return {"ok": True}
@@ -32,7 +23,6 @@ def manager_only(user: User = Depends(require_role(Role.manager))):
 
 @pytest.fixture
 def client():
-    # In-memory SQLite. StaticPool keeps one connection so all requests see the same data.
     engine = create_engine("sqlite://", connect_args={"check_same_thread": False},
                            poolclass=StaticPool)
     Base.metadata.create_all(engine)
@@ -54,7 +44,6 @@ def client():
         finally:
             db.close()
 
-    # Swap the real database for the test one, only while this test runs.
     app.dependency_overrides[get_db] = get_test_db
     yield TestClient(app)
     app.dependency_overrides.clear()
@@ -65,7 +54,6 @@ def login(client, email, password=PASSWORD):
                        follow_redirects=False)
 
 
-# --- Logging in -------------------------------------------------------------
 def test_login_page_loads(client):
     assert client.get("/login").status_code == 200
 
@@ -98,7 +86,6 @@ def test_unknown_email_gives_same_message_as_wrong_password(client):
     assert "Wrong email or password" in wrong_pw.text
 
 
-# --- The session cookie -----------------------------------------------------
 def test_cookie_is_httponly(client):
     set_cookie = login(client, "manager@test.com").headers["set-cookie"].lower()
     assert "httponly" in set_cookie
@@ -122,18 +109,15 @@ def test_browser_without_cookie_is_sent_to_login(client):
 
 
 def test_tampered_cookie_is_rejected(client):
-    """A tenant edits their token to say "manager". The signature no longer matches."""
     login(client, "tenant@test.com")
     header, payload, signature = client.cookies[COOKIE_NAME].split(".")
 
-    # The middle part is just base64 JSON: anyone can read and change it...
     data = json.loads(base64.urlsafe_b64decode(payload + "=" * (-len(payload) % 4)))
     data["role"] = "manager"
-    data["sub"] = "2"  # and pretend to be the manager's user id
+    data["sub"] = "2"
     forged = base64.urlsafe_b64encode(json.dumps(data).encode()).rstrip(b"=").decode()
 
-    # ...but without SECRET_KEY they can't make a matching signature.
-    client.cookies.clear()  # replace the real cookie, don't add a second one
+    client.cookies.clear()
     client.cookies.set(COOKIE_NAME, f"{header}.{forged}.{signature}")
     assert client.get("/me").status_code == 401
     assert client.get("/test-manager-only").status_code == 401
@@ -146,7 +130,6 @@ def test_logout_ends_the_session(client):
     assert client.get("/me").status_code == 401
 
 
-# --- Roles ------------------------------------------------------------------
 def test_manager_can_open_manager_page(client):
     login(client, "manager@test.com")
     assert client.get("/test-manager-only").status_code == 200
@@ -157,7 +140,6 @@ def test_tenant_cannot_open_manager_page(client):
     assert client.get("/test-manager-only").status_code == 403
 
 
-# --- Passwords --------------------------------------------------------------
 def test_password_is_never_stored_in_plain_text():
     hashed = hash_password(PASSWORD)
     assert PASSWORD not in hashed
