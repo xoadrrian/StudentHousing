@@ -1,23 +1,35 @@
-from sqlalchemy import select
+import sys
 
-from database import SessionLocal, engine
-from models import Base, Role, User
-from routers.auth import hash_password
+from sqlalchemy import text
 
-TEST_PASSWORD = "Test1234!"
-USERS = [
-    ("Emma", "Johnson", "emma.johnson@xyzmail.com", Role.tenant),
-    ("John", "Doe", "john@studenthousing.com", Role.manager),
-    ("Alice", "Smith", "alice@studenthousing.com", Role.worker),
-]
+from database import SessionLocal
+from models import Manager, Role, Tenant, User, Worker
 
-Base.metadata.create_all(engine)
+if len(sys.argv) < 5:
+    sys.exit("Usage: python create_test_users.py <email> <first name> <last name> <tenant|manager|worker> [room_id]")
+
+email, first, last, role = sys.argv[1].strip().lower(), sys.argv[2], sys.argv[3], Role(sys.argv[4])
+room_id = int(sys.argv[5]) if len(sys.argv) > 5 else None
+if role is Role.tenant and room_id is None:
+    sys.exit("A tenant needs a room_id.")
+
 with SessionLocal() as db:
-    for first, last, email, role in USERS:
-        if db.scalar(select(User).where(User.email == email)):
-            print("exists: ", email)
-            continue
-        db.add(User(first_name=first, surname=last, email=email,
-                    password_hash=hash_password(TEST_PASSWORD), role=role))
-        print("created:", email, f"({role.value})")
+    account_id = db.execute(text("select id from auth.users where lower(email) = :e"),
+                            {"e": email}).scalar()
+    if account_id is None:
+        sys.exit(f"No Supabase Auth account for {email}. Create it in the dashboard first.")
+
+    user = db.get(User, account_id) or User(id=account_id, first_name=first, last_name=last, email=email)
+    db.add(user)
+    db.flush()
+    if user.role is not None:
+        sys.exit(f"{email} already has the role {user.role.value}.")
+
+    if role is Role.tenant:
+        db.add(Tenant(user_id=account_id, room_id=room_id))
+    elif role is Role.manager:
+        db.add(Manager(user_id=account_id))
+    else:
+        db.add(Worker(user_id=account_id))
     db.commit()
+    print(f"{email} can now log in as {role.value}.")

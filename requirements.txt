@@ -5,6 +5,6 @@ psycopg2-binary
 psycopg[binary]
 python-dotenv
 paho-mqtt
-pwdlib[argon2]
+httpx
 pyjwt
 pytest

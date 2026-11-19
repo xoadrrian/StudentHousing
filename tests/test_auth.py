@@ -1,5 +1,6 @@
 import base64
 import json
+import uuid
 
 import pytest
 from fastapi import Depends
@@ -8,12 +9,30 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
+import routers.auth as auth
 from database import get_db
 from main import app
-from models import Base, Role, User
-from routers.auth import COOKIE_NAME, hash_password, require_role
+from models import Base, Manager, Role, Tenant, User, Worker
+from routers.auth import COOKIE_NAME, require_role
 
 PASSWORD = "Test1234!"
+TENANT_ID = uuid.uuid4()
+MANAGER_ID = uuid.uuid4()
+WORKER_ID = uuid.uuid4()
+NO_ROLE_ID = uuid.uuid4()
+
+FAKE_ACCOUNTS = {
+    "tenant@test.com": TENANT_ID,
+    "manager@test.com": MANAGER_ID,
+    "worker@test.com": WORKER_ID,
+    "norole@test.com": NO_ROLE_ID,
+}
+
+
+def fake_supabase_sign_in(email, password):
+    if email in FAKE_ACCOUNTS and password == PASSWORD:
+        return FAKE_ACCOUNTS[email]
+    return None
 
 
 @app.get("/test-manager-only")
@@ -22,7 +41,7 @@ def manager_only(user: User = Depends(require_role(Role.manager))):
 
 
 @pytest.fixture
-def client():
+def client(monkeypatch):
     engine = create_engine("sqlite://", connect_args={"check_same_thread": False},
                            poolclass=StaticPool)
     Base.metadata.create_all(engine)
@@ -30,10 +49,13 @@ def client():
 
     with TestSession() as db:
         db.add_all([
-            User(first_name="Emma", surname="Johnson", email="tenant@test.com",
-                 password_hash=hash_password(PASSWORD), role=Role.tenant),
-            User(first_name="John", surname="Doe", email="manager@test.com",
-                 password_hash=hash_password(PASSWORD), role=Role.manager),
+            User(id=TENANT_ID, first_name="Emma", last_name="Johnson", email="tenant@test.com"),
+            User(id=MANAGER_ID, first_name="John", last_name="Doe", email="manager@test.com"),
+            User(id=WORKER_ID, first_name="Alice", last_name="Smith", email="worker@test.com"),
+            User(id=NO_ROLE_ID, first_name="New", last_name="Person", email="norole@test.com"),
+            Tenant(user_id=TENANT_ID, room_id=1),
+            Manager(user_id=MANAGER_ID),
+            Worker(user_id=WORKER_ID),
         ])
         db.commit()
 
@@ -45,6 +67,7 @@ def client():
             db.close()
 
     app.dependency_overrides[get_db] = get_test_db
+    monkeypatch.setattr(auth, "supabase_sign_in", fake_supabase_sign_in)
     yield TestClient(app)
     app.dependency_overrides.clear()
 
@@ -64,8 +87,8 @@ def test_correct_login_sets_cookie_and_redirects_by_role(client):
     assert r.headers["location"] == "/manager"
     assert COOKIE_NAME in r.cookies
 
-    r = login(client, "tenant@test.com")
-    assert r.headers["location"] == "/home"
+    assert login(client, "tenant@test.com").headers["location"] == "/home"
+    assert login(client, "worker@test.com").headers["location"] == "/worker"
 
 
 def test_email_is_not_case_sensitive(client):
@@ -86,6 +109,21 @@ def test_unknown_email_gives_same_message_as_wrong_password(client):
     assert "Wrong email or password" in wrong_pw.text
 
 
+def test_account_without_a_role_cannot_log_in(client):
+    r = login(client, "norole@test.com")
+    assert r.status_code == 403
+    assert COOKIE_NAME not in r.cookies
+
+
+def test_supabase_down_shows_a_clear_error(client, monkeypatch):
+    def down(email, password):
+        raise auth.LoginServiceDown("no internet")
+    monkeypatch.setattr(auth, "supabase_sign_in", down)
+    r = login(client, "manager@test.com")
+    assert r.status_code == 503
+    assert COOKIE_NAME not in r.cookies
+
+
 def test_cookie_is_httponly(client):
     set_cookie = login(client, "manager@test.com").headers["set-cookie"].lower()
     assert "httponly" in set_cookie
@@ -97,6 +135,7 @@ def test_me_shows_logged_in_user(client):
     r = client.get("/me")
     assert r.status_code == 200
     assert r.json()["role"] == "manager"
+    assert r.json()["id"] == str(MANAGER_ID)
 
 
 def test_no_cookie_means_not_logged_in(client):
@@ -114,7 +153,7 @@ def test_tampered_cookie_is_rejected(client):
 
     data = json.loads(base64.urlsafe_b64decode(payload + "=" * (-len(payload) % 4)))
     data["role"] = "manager"
-    data["sub"] = "2"
+    data["sub"] = str(MANAGER_ID)
     forged = base64.urlsafe_b64encode(json.dumps(data).encode()).rstrip(b"=").decode()
 
     client.cookies.clear()
@@ -140,7 +179,6 @@ def test_tenant_cannot_open_manager_page(client):
     assert client.get("/test-manager-only").status_code == 403
 
 
-def test_password_is_never_stored_in_plain_text():
-    hashed = hash_password(PASSWORD)
-    assert PASSWORD not in hashed
-    assert hashed.startswith("$argon2")
+def test_no_password_is_stored_in_our_tables():
+    columns = {c.name for c in User.__table__.columns}
+    assert not any("pass" in c for c in columns)

@@ -9,11 +9,12 @@ from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 import mqtt_listener
-from database import engine
+from database import DATABASE_URL, engine
 from models import Base
 from routers import auth
 
-Base.metadata.create_all(engine)
+if DATABASE_URL.startswith("sqlite"):
+    Base.metadata.create_all(engine)
 
 
 @asynccontextmanager
