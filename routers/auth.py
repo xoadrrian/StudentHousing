@@ -54,7 +54,7 @@ def supabase_sign_in(email: str, password: str) -> uuid.UUID | None:
         raise LoginServiceDown(str(e)) from e
     if r.status_code == 200:
         return uuid.UUID(r.json()["user"]["id"])
-    if r.status_code in (400, 401, 422):
+    if r.status_code in (400, 422):
         return None
     raise LoginServiceDown(f"Supabase Auth answered {r.status_code}")
 

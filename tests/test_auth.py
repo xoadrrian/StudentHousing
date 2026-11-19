@@ -182,3 +182,18 @@ def test_tenant_cannot_open_manager_page(client):
 def test_no_password_is_stored_in_our_tables():
     columns = {c.name for c in User.__table__.columns}
     assert not any("pass" in c for c in columns)
+
+
+class FakeResponse:
+    def __init__(self, status_code):
+        self.status_code = status_code
+
+
+def test_wrong_supabase_key_is_not_reported_as_wrong_password(monkeypatch):
+    monkeypatch.setattr(auth, "SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setattr(auth, "SUPABASE_ANON_KEY", "bad-key")
+    monkeypatch.setattr(auth.httpx, "post", lambda *a, **k: FakeResponse(401))
+    with pytest.raises(auth.LoginServiceDown):
+        auth.supabase_sign_in("someone@test.com", "whatever")
+    monkeypatch.setattr(auth.httpx, "post", lambda *a, **k: FakeResponse(400))
+    assert auth.supabase_sign_in("someone@test.com", "wrong") is None
