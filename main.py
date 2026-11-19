@@ -11,7 +11,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 import mqtt_listener
 from database import DATABASE_URL, engine
 from models import Base
-from routers import auth
+from routers import auth, pages
 
 if DATABASE_URL.startswith("sqlite"):
     Base.metadata.create_all(engine)
@@ -48,3 +48,11 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.get("/health/mqtt")
+def health_mqtt():
+    if mqtt_listener.is_connected():
+        return {"status": "ok"}
+    return {"status": "disconnected"}
+
+app.include_router(pages.router)

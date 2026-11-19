@@ -90,12 +90,12 @@ def require_role(*allowed: Role):
 
 
 def login_error(request: Request, message: str, code: int):
-    return templates.TemplateResponse(request, "index.html", {"error": message}, status_code=code)
+    return templates.TemplateResponse(request, "login.html", {"error": message}, status_code=code)
 
 
 @router.get("/login")
 def login_page(request: Request):
-    return templates.TemplateResponse(request, "index.html", {"error": None})
+    return templates.TemplateResponse(request, "login.html", {"error": None})
 
 
 @router.post("/login")
