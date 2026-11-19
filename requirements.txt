@@ -1,7 +1,10 @@
 fastapi[standard]
+uvicorn
 sqlalchemy
 psycopg2-binary
+psycopg[binary]
 python-dotenv
+paho-mqtt
 pwdlib[argon2]
 pyjwt
 pytest
