@@ -5,6 +5,7 @@ psycopg2-binary
 psycopg[binary]
 python-dotenv
 paho-mqtt
+jinja2
 httpx
 pyjwt
 pytest

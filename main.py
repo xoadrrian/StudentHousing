@@ -6,6 +6,7 @@ from fastapi import FastAPI, Request
 from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 import mqtt_listener
@@ -43,16 +44,9 @@ async def not_logged_in_goes_to_login(request: Request, exc: StarletteHTTPExcept
 @app.get("/")
 def root():
     return RedirectResponse("/login")
-
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
-
-@app.get("/health/mqtt")
-def health_mqtt():
-    if mqtt_listener.is_connected():
-        return {"status": "ok"}
-    return {"status": "disconnected"}
-
-app.include_router(pages.router)
