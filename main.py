@@ -1,19 +1,35 @@
+import os
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from pathlib import Path
+
+from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.exception_handlers import http_exception_handler
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
 from routers import sensors
 
 import mqtt_listener
+from database import DATABASE_URL, engine, get_db
+from models import Base
+from routers import auth, pages
+from routers.auth import HOME_BY_ROLE, get_current_user
+
+if DATABASE_URL.startswith("sqlite"):
+    Base.metadata.create_all(engine)
 
 @asynccontextmanager
 async def lifespan(app):
-    client = mqtt_listener.start()   # when the app starts
+    client = mqtt_listener.start() if os.getenv("MQTT_HOST") else None
     yield
-    client.loop_stop()               # when the app stops
-    client.disconnect()
+    if client:
+        client.loop_stop()
+        client.disconnect()
 
+app = FastAPI(title="BV Housing", lifespan=lifespan)
+app.include_router(auth.router)
+app.include_router(pages.router)
 
 app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -21,30 +37,29 @@ app.include_router(sensors.router)
 
 templates = Jinja2Templates(directory="templates")
 
+
+@app.exception_handler(StarletteHTTPException)
+async def not_logged_in_goes_to_login(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 401 and "text/html" in request.headers.get("accept", ""):
+        return RedirectResponse("/login")
+    return await http_exception_handler(request, exc)
+
+
+@app.get("/")
+def root(request: Request, db: Session = Depends(get_db)):
+    try:
+        user = get_current_user(request, db)
+    except HTTPException:
+        return RedirectResponse("/login")
+    return RedirectResponse(HOME_BY_ROLE[user.role])
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
-@app.get("/home")
-def home_page(request: Request):
-    return templates.TemplateResponse(request, "home.html")
-
-@app.get("/myTickets")
-def myTickets_page(request: Request):
-    return templates.TemplateResponse(request, "myTickets.html")
-
-@app.get("/")
-def login_page(request: Request):
-    return templates.TemplateResponse(request, "login.html")
-
-@app.get("/addItem")
-def addItem_page(request: Request):
-    return templates.TemplateResponse(request, "addItem.html")
-
-@app.get("/communityComplaint")
-def communityComplaint_page(request: Request):
-    return templates.TemplateResponse(request, "communityComplaint.html")
-
-@app.get("/repairTicket")
-def repairTicket_page(request: Request):
-    return templates.TemplateResponse(request, "repairTicket.html")
+@app.get("/health/mqtt")
+def health_mqtt():
+    if mqtt_listener.is_connected():
+        return {"status": "ok"}
+    return {"status": "disconnected"}

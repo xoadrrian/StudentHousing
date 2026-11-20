@@ -8,14 +8,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const navPlaceholder = document.getElementById("navbar-placeholder");
   if (navPlaceholder) {
     // Check which HTML page is currently open
-    const currentPage = window.location.pathname.split("/").pop();
+    const currentPage = window.location.pathname;
 
     // Highlight "My Tickets" if the user is on myTickets, ticketDetails, or either ticketForm
     const isTicketsSection = [
-      "myTickets.html",
-      "tecketDetails.html",
-      "ticketForm1.html",
-      "ticketForm2.html"
+      "/myTickets",
+      "/ticketDetails",
+      "/repairTicket",
+      "/communityComplaint"
     ].includes(currentPage);
 
     navPlaceholder.innerHTML = `
@@ -23,8 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="nav-container">
           <div class="brand">BV Housing</div>
           <nav class="nav-links">
-            <a href="home.html" class="nav-link ${currentPage === "home.html" ? "active" : ""}">Home</a>
-            <a href="myTickets.html" class="nav-link ${isTicketsSection ? "active" : ""}">My Tickets</a>
+            <a href="/home" class="nav-link ${currentPage === "/home" ? "active" : ""}">Home</a>
+            <a href="/myTickets" class="nav-link ${isTicketsSection ? "active" : ""}">My Tickets</a>
+            <form method="post" action="/logout" class="logout-form">
+              <button type="submit" class="nav-link nav-logout">Log out</button>
+            </form>
           </nav>
         </div>
       </header>
@@ -69,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         saveTicket(ticket);
-        window.location.href = "myTickets.html"; // Go to My Tickets page
+        window.location.href = "/myTickets"; // Go to My Tickets page
       };
 
       // Check if the user attached an image
@@ -105,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       saveTicket(ticket);
-      window.location.href = "myTickets.html"; // Go to My Tickets page
+      window.location.href = "/myTickets"; // Go to My Tickets page
     });
   }
 
@@ -131,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Optional: When clicked, remember which ticket was clicked and open details page
       ticketCard.addEventListener("click", () => {
         localStorage.setItem("selected_ticket_id", ticket.id);
-        window.location.href = "tecketDetails.html"; // Matches your filename
+        window.location.href = "/ticketDetails"; // Matches your filename
       });
 
       // Put the ticket into the right column

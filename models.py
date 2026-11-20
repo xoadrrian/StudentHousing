@@ -1,8 +1,67 @@
+import enum
+import uuid
 from datetime import datetime
 from decimal import Decimal
-from sqlalchemy import BigInteger, DateTime, Numeric
-from sqlalchemy.orm import Mapped, mapped_column
+
+from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, Numeric, Text, Uuid
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from database import Base
+
+
+class Role(str, enum.Enum):
+    tenant = "tenant"
+    manager = "manager"
+    worker = "worker"
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True)
+    first_name: Mapped[str] = mapped_column(Text)
+    last_name: Mapped[str] = mapped_column(Text)
+    email: Mapped[str] = mapped_column(Text, unique=True)
+
+    tenant: Mapped["Tenant | None"] = relationship(back_populates="user", lazy="selectin")
+    manager: Mapped["Manager | None"] = relationship(back_populates="user", lazy="selectin")
+    worker: Mapped["Worker | None"] = relationship(back_populates="user", lazy="selectin")
+
+    @property
+    def role(self) -> Role | None:
+        if self.manager is not None:
+            return Role.manager
+        if self.worker is not None:
+            return Role.worker
+        if self.tenant is not None:
+            return Role.tenant
+        return None
+
+
+class Tenant(Base):
+    __tablename__ = "tenant"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), primary_key=True)
+
+    room_id: Mapped[int] = mapped_column(Integer)
+
+    user: Mapped[User] = relationship(back_populates="tenant")
+
+
+class Manager(Base):
+    __tablename__ = "manager"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), primary_key=True)
+
+    user: Mapped[User] = relationship(back_populates="manager")
+
+
+class Worker(Base):
+    __tablename__ = "worker"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), primary_key=True)
+
+    user: Mapped[User] = relationship(back_populates="worker")
 
 
 class SensorReading(Base):

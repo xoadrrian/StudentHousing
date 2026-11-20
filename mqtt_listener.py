@@ -12,13 +12,28 @@ load_dotenv()
 
 TOPIC = "$share/bv/bv/rooms/+/readings"
 
+connected = False  # updated by on_connect / on_disconnect, read by /health/mqtt
+
+
+def is_connected():
+    return connected
+
 
 def on_connect(client, userdata, flags, reason_code, properties):
+    global connected
     if reason_code.is_failure:
         print("MQTT connect failed:", reason_code)
+        connected = False
         return
     print("Connected to MQTT")
+    connected = True
     client.subscribe(TOPIC, qos=1)
+
+
+def on_disconnect(client, userdata, flags, reason_code, properties):
+    global connected
+    connected = False
+    print("MQTT disconnected:", reason_code)
 
 
 def on_message(client, userdata, msg):
@@ -58,6 +73,7 @@ def start():
     client.username_pw_set(os.getenv("MQTT_USER"), os.getenv("MQTT_PASS"))
     client.tls_set()
     client.on_connect = on_connect
+    client.on_disconnect = on_disconnect
     client.on_message = on_message
     client.connect_async(os.getenv("MQTT_HOST"), int(os.getenv("MQTT_PORT", 8883)))
     client.loop_start()

@@ -1,3 +1,5 @@
+# Student Housing
+
 This is the EN11 group 1 GitHub repo for our project - Website for student housing where tenants manage chores and supplies, report issues, and chat with maintenance workers. Managers assign issues to workers.
 
 ## Project structure
@@ -41,8 +43,8 @@ This is the EN11 group 1 GitHub repo for our project - Website for student housi
 6. **Create the `.env` file** in the main folder with the link the team sends you:
    Will be sent later
 
-
 ## Working together
+
 1. **Pull first:** In GitHub Desktop, click *Fetch origin → Pull origin* to get the latest changes.
 2. **New branch for each task:** *Current branch → New branch* (e.g. `feature/tickets`), so you don't break `main`.
 3. **Commit and push:** Write a short summary, *Commit*, then *Push origin*.
