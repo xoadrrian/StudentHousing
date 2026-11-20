@@ -10,7 +10,7 @@ from models import SensorReading
 
 load_dotenv()
 
-TOPIC = "bv/rooms/+/readings"  # + = any room id
+TOPIC = "$share/bv/bv/rooms/+/readings"
 
 connected = False  # updated by on_connect / on_disconnect, read by /health/mqtt
 
@@ -37,12 +37,17 @@ def on_disconnect(client, userdata, flags, reason_code, properties):
 
 
 def on_message(client, userdata, msg):
-    # topic looks like: bv/rooms/3/readings
     try:
         room_id = int(msg.topic.split("/")[2])
         data = json.loads(msg.payload)
+        if not isinstance(data, dict):
+            print("Bad message on", msg.topic)
+            return
     except (ValueError, IndexError):
         print("Bad message on", msg.topic)
+        return
+
+    if not data.get("co2"):
         return
 
     with SessionLocal() as db:
@@ -66,10 +71,10 @@ def on_message(client, userdata, msg):
 def start():
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
     client.username_pw_set(os.getenv("MQTT_USER"), os.getenv("MQTT_PASS"))
-    client.tls_set()  # port 8883 is encrypted
+    client.tls_set()
     client.on_connect = on_connect
     client.on_disconnect = on_disconnect
     client.on_message = on_message
     client.connect_async(os.getenv("MQTT_HOST"), int(os.getenv("MQTT_PORT", 8883)))
-    client.loop_start()  # runs in the background
+    client.loop_start()
     return client

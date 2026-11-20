@@ -6,8 +6,9 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from sqlalchemy.orm import Session
-from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi import Request
+from fastapi.templating import Jinja2Templates
+from routers import sensors
 
 import mqtt_listener
 from database import DATABASE_URL, engine, get_db
@@ -17,7 +18,6 @@ from routers.auth import HOME_BY_ROLE, get_current_user
 
 if DATABASE_URL.startswith("sqlite"):
     Base.metadata.create_all(engine)
-
 
 @asynccontextmanager
 async def lifespan(app):
@@ -31,8 +31,11 @@ app = FastAPI(title="BV Housing", lifespan=lifespan)
 app.include_router(auth.router)
 app.include_router(pages.router)
 
-if Path("static").is_dir():
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+app = FastAPI(lifespan=lifespan)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+app.include_router(sensors.router)
+
+templates = Jinja2Templates(directory="templates")
 
 
 @app.exception_handler(StarletteHTTPException)

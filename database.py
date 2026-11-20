@@ -6,12 +6,8 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./local.db")
-
-connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
-
-engine = create_engine(DATABASE_URL, connect_args=connect_args, pool_pre_ping=True)
-
+url = os.getenv("DATABASE_URL").replace("postgresql://", "postgresql+psycopg://", 1)
+engine = create_engine(url, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, autoflush=False)
 
 
