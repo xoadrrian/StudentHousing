@@ -16,53 +16,7 @@ body {
   flex-direction: column;
 }
 
-/* Navbar */
-.navbar {
-  background-color: #2e4e78;
-  color: #ffffff;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  padding: 0 40px;
-}
 
-.nav-container {
-  width: 100%;
-  max-width: 1540px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.brand {
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-}
-
-.nav-links {
-  display: flex;
-  gap: 48px;
-}
-
-.nav-link {
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 400;
-  opacity: 0.9;
-  transition: opacity 0.2s ease;
-}
-
-.nav-link:hover {
-  opacity: 1;
-}
-
-.nav-link.active {
-  font-weight: 700;
-  opacity: 1;
-}
 
 /* Main Reports Layout */
 .reports-container {
@@ -145,6 +99,59 @@ body {
 .btn-new-report:active {
   transform: translateY(1px);
 }
+
+
+/* Container spacing inside each column */
+.report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Individual Ticket Card */
+.report-item {
+  background-color: #ffffff;
+  border: 1px solid #e0e4e8;
+  border-left: 4px solid #2b6cb0; /* Accent bar on the left */
+  border-radius: 8px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+}
+
+/* Hover feedback so users know the card is clickable */
+.report-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e0;
+}
+
+/* Ticket Title */
+.report-item h3 {
+  margin: 0 0 6px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+/* Ticket Description (clamped to 2 lines so long text stays neat) */
+.report-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4a5568;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Optional: Different accent color for Community Complaints column */
+#community-reports-list .report-item {
+  border-left-color: #dd6b20;
+}
+
 
 /* Responsive Adjustments */
 @media (max-width: 720px) {
