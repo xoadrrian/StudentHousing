@@ -4,20 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BV Housing - Add Item</title>
+  <link rel="stylesheet" href="../static/navbar.css" />
   <link rel="stylesheet" href="../static/add.css" />
 </head>
 <body>
 
-  <!-- Top Navigation Bar (Matches home.html) -->
-  <header class="navbar">
-    <div class="nav-container">
-      <div class="logo">BV Housing</div>
-      <nav class="nav-links">
-        <a href="home.html" class="nav-link active">Home</a>
-        <a href="myTickets.html" class="nav-link">My Tickets</a>
-      </nav>
-    </div>
-  </header>
+  <!-- Navigation Bar -->
+ <div id="navbar-placeholder"></div>
 
   <!-- Main Content -->
   <main class="page-container">
@@ -42,7 +35,7 @@
             <button type="button" class="text-btn" id="btn-select-all">[Select All]</button>
           </div>
 
-          <!-- JS will populate tenant pills here -->
+          <!-- JS part -->
           <div class="tenant-grid" id="tenant-pills-container">
             <!-- Example of what JS inserts:
             <label class="tenant-pill">

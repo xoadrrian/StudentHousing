@@ -1,6 +1,38 @@
 // Wait until the HTML page is fully loaded before running any code
 document.addEventListener("DOMContentLoaded", () => {
 
+
+// ==========================================
+  // SHARED NAVIGATION BAR
+  // ==========================================
+  const navPlaceholder = document.getElementById("navbar-placeholder");
+  if (navPlaceholder) {
+    // Check which HTML page is currently open
+    const currentPage = window.location.pathname.split("/").pop();
+
+    // Highlight "My Tickets" if the user is on myTickets, ticketDetails, or either ticketForm
+    const isTicketsSection = [
+      "myTickets.html",
+      "tecketDetails.html",
+      "ticketForm1.html",
+      "ticketForm2.html"
+    ].includes(currentPage);
+
+    navPlaceholder.innerHTML = `
+      <header class="navbar">
+        <div class="nav-container">
+          <div class="brand">BV Housing</div>
+          <nav class="nav-links">
+            <a href="home.html" class="nav-link ${currentPage === "home.html" ? "active" : ""}">Home</a>
+            <a href="myTickets.html" class="nav-link ${isTicketsSection ? "active" : ""}">My Tickets</a>
+          </nav>
+        </div>
+      </header>
+    `;
+  }    
+
+
+
   //  Get existing tickets from browser memory (or an empty list if none exist yet)
   function getTickets() {
     const saved = localStorage.getItem("bv_tickets");

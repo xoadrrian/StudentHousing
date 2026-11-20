@@ -4,22 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BV Housing - Home</title>
+  <link rel="stylesheet" href="../static/navbar.css" />
   <link rel="stylesheet" href="../static/style.css" />
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
-  <header class="navbar">
-    <div class="nav-container">
-      <div class="logo">BV Housing</div>
-
-      <nav class="nav-links">
-        <a href="home.html" class="nav-link active">Home</a>
-        <a href="myTickets.html" class="nav-link">My Tickets</a>
-      </nav>
-
-    </div>
-  </header>
+  <!-- Navigation Bar -->
+ <div id="navbar-placeholder"></div>
 
   <!-- Main Dashboard Content -->
   <main class="main-container">
@@ -40,7 +31,7 @@
         </div>
 
         <div class="summary-body" id="to-buy-list">
-          <!-- JS will populate user's items to buy here -->
+          <!-- JS part -->
         </div>
 
         <div class="summary-footer">
@@ -139,6 +130,50 @@
           <!-- JS will populate tasks for the selected day here -->
         </div>
       </section>
+
+<p class="subtitle2">Room environment:</p>
+
+    <!-- Room Environment Card (Temperature, Humidity, CO2) -->
+    <section class="card environment-card">
+      <div class="env-grid">
+        
+        <!-- Temperature -->
+        <div class="env-item">
+          <div class="env-header">
+            <h3>Temperature</h3>
+          </div>
+          <div class="env-body">
+            <span class="env-value" id="env-temp">-- °C</span>
+            <span class="env-status status-good" id="env-temp-status">Waiting for sensor...</span>
+          </div>
+        </div>
+
+        <!-- Humidity -->
+        <div class="env-item">
+          <div class="env-header">
+            <h3>Humidity</h3>
+          </div>
+          <div class="env-body">
+            <span class="env-value" id="env-humidity">-- %</span>
+            <span class="env-status status-good" id="env-humidity-status">Waiting for sensor...</span>
+          </div>
+        </div>
+
+        <!-- CO2 -->
+        <div class="env-item">
+          <div class="env-header">
+            <h3>CO<sub>2</sub></h3>
+          </div>
+          <div class="env-body">
+            <span class="env-value" id="env-co2">-- ppm</span>
+            <span class="env-status status-good" id="env-co2-status">Waiting for sensor...</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
 
     </div>
   </main>

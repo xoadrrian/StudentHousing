@@ -18,7 +18,7 @@ body {
   display: none !important;
 }
 
-/* Navbar */
+/* Navbar 
 .navbar {
   background-color: #2e4e78;
   color: #ffffff;
@@ -65,7 +65,7 @@ body {
 .nav-link.active {
   font-weight: 700;
 }
-
+*/
 /* Main Two-Column Grid */
 .details-container {
   width: 100%;
