@@ -4,3 +4,4 @@ sqlalchemy
 psycopg[binary]
 python-dotenv
 paho-mqtt
+jinja2
