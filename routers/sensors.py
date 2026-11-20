@@ -5,7 +5,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from database import get_db
-from models import SensorReading
+from models import Role, SensorReading, User
+from routers.auth import require_role
 
 router = APIRouter(prefix="/api/sensors", tags=["sensors"])
 
@@ -52,3 +53,10 @@ def get_reading_history(
     readings = db.scalars(query).all()
 
     return [reading_to_dict(r) for r in readings]
+
+@router.get("/my-room/latest")
+def get_my_room_latest(
+    user: User = Depends(require_role(Role.tenant)),
+    db: Session = Depends(get_db),
+):
+    return get_latest_reading(user.tenant.room_id, db)

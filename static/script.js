@@ -169,4 +169,48 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ==========================================
+  // ROOM ENVIRONMENT (live sensor data)
+  // ==========================================
+  const envTemp = document.getElementById("env-temp");
+  if (envTemp) {
+    function setStatus(id, level, text) {
+      const el = document.getElementById(id);
+      el.className = "env-status status-" + level; // good | warning | alert
+      el.textContent = text;
+    }
+
+    async function loadEnvironment() {
+      try {
+        const res = await fetch("/api/sensors/my-room/latest");
+        if (!res.ok) return; // no readings yet: keep "Waiting for sensor..."
+        const r = await res.json();
+
+        envTemp.textContent = `${Number(r.temperature_c).toFixed(1)} °C`;
+        document.getElementById("env-humidity").textContent = `${Math.round(r.humidity_pct)} %`;
+        document.getElementById("env-co2").textContent = `${r.co2_ppm} ppm`;
+
+        const t = r.temperature_c;
+        if (t >= 19 && t <= 24) setStatus("env-temp-status", "good", "Comfortable");
+        else if (t >= 16 && t <= 27) setStatus("env-temp-status", "warning", t < 19 ? "A bit cold" : "A bit warm");
+        else setStatus("env-temp-status", "alert", t < 16 ? "Too cold" : "Too hot");
+
+        const h = r.humidity_pct;
+        if (h >= 30 && h <= 60) setStatus("env-humidity-status", "good", "Good");
+        else if (h >= 20 && h <= 70) setStatus("env-humidity-status", "warning", h < 30 ? "Dry" : "Humid");
+        else setStatus("env-humidity-status", "alert", h < 20 ? "Very dry" : "Very humid");
+
+        const c = r.co2_ppm;
+        if (c < 1000) setStatus("env-co2-status", "good", "Fresh air");
+        else if (c < 1500) setStatus("env-co2-status", "warning", "Open a window");
+        else setStatus("env-co2-status", "alert", "Ventilate now");
+      } catch (e) {
+        console.error("Could not load sensor data", e);
+      }
+    }
+
+    loadEnvironment();
+    setInterval(loadEnvironment, 30000); // refresh every 30 seconds
+  }
+  
 });
