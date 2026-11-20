@@ -3,9 +3,9 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
+from routers import sensors
 
 import mqtt_listener
-
 
 @asynccontextmanager
 async def lifespan(app):
@@ -17,6 +17,8 @@ async def lifespan(app):
 
 app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.include_router(sensors.router)
+
 templates = Jinja2Templates(directory="templates")
 
 @app.get("/health")
