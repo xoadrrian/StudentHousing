@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BV Housing - Add Chore</title>
+  <link rel="stylesheet" href="/static/navbar.css" />
+  <link rel="stylesheet" href="/static/add.css" />
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BV Housing - Add Chore</title>
+  <link rel="stylesheet" href="/static/addChore.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+ <div id="navbar-placeholder"></div>
+
+  <!-- Main Content -->
+  <main class="page-container">
+    <a href="/home" class="back-link">← back</a>
+
+    <section class="card form-card">
+      <div class="form-header">
+        <h2>Add Chore</h2>
+      </div>
+
+      <form id="add-chore-form">
+        <!-- Chore Title -->
+        <div class="form-group">
+          <label for="chore-title">Chore Title</label>
+          <input type="text" id="chore-title" name="title" required />
+        </div>
+
+        <!-- Assigned Tenants (Compact Pill Grid) -->
+        <div class="form-group">
+          <div class="label-row">
+            <label>Assigned Tenants</label>
+            <button type="button" class="text-btn" id="btn-select-all">[Select All]</button>
+          </div>
+
+          <!-- JS will populate tenant pills here -->
+          <div class="tenant-grid" id="tenant-pills-container">
+            <!-- Example of what JS inserts:
+            <label class="tenant-pill">
+              <input type="checkbox" name="tenants" value="1" />
+              <span>Alex</span>
+            </label>
+            -->
+          </div>
+        </div>
+
+        <!-- Due Date -->
+        <div class="form-group">
+          <label for="chore-due-date">Due Date</label>
+          <input type="date" id="chore-due-date" name="dueDate" required />
+        </div>
+
+        <!-- Recurring Dropdown -->
+        <div class="form-group">
+          <label for="chore-recurring">Recurring</label>
+          <select id="chore-recurring" name="recurring">
+            <option value="none" selected>None</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+
+        <!-- Bottom Buttons -->
+        <div class="form-footer">
+          <a href="/home" class="cancel-link">[Cancel]</a>
+          <button type="submit" class="btn-submit">[Save]</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+ <script src="/static/script.js"></script>
+</body>
+</html>

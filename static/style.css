@@ -182,8 +182,7 @@ body {
 
 
 
-/* SCHEDULING PAGE */
-/* Reset & Base Typography */
+/* HOME PAGE */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -197,7 +196,7 @@ body {
   min-height: 100vh;
 }
 
-/* Navbar */
+/* Navbar 
 .navbar {
   background-color: #2e4e78;
   color: #ffffff;
@@ -243,7 +242,8 @@ body {
 .nav-link.active {
   font-weight: 700;
   opacity: 1;
-}
+  text-decoration: underline;
+}*/
 
 /* Main Container */
 .main-container {
@@ -468,6 +468,91 @@ body {
   flex: 1;
   padding-top: 12px;
   margin-right: 26px;
+}
+
+/* Room Environment Card */
+.environment-card {
+  margin-top: 12px;
+  margin-bottom: 32px;
+  padding: 24px 32px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.env-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.env-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Matches the blue title + thin bottom line from your design */
+.env-header {
+  width: 100%;
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.env-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2c5282;
+}
+
+/* Sensor Value & Status Pill */
+.env-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.env-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.env-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+/* Status color variations for JS to toggle */
+.env-status.status-good {
+  background-color: #e6fffa;
+  color: #234e52;
+}
+
+.env-status.status-warning {
+  background-color: #fefcbf;
+  color: #744210;
+}
+
+.env-status.status-alert {
+  background-color: #fed7d7;
+  color: #742a2a;
+}
+
+/* Responsive stacking on mobile screens */
+@media (max-width: 768px) {
+  .env-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 }
 
 /* Responsive adjustments */

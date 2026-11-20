@@ -25,6 +25,16 @@ def add_item(request: Request, user: User = Depends(tenant_only)):
     return templates.TemplateResponse(request, "addItem.html", {"user": user})
 
 
+@router.get("/addChore")
+def add_chore(request: Request, user: User = Depends(tenant_only)):
+    return templates.TemplateResponse(request, "addChore.html", {"user": user})
+
+
+@router.get("/ticketDetails")
+def ticket_details(request: Request, user: User = Depends(require_role(Role.tenant, Role.worker))):
+    return templates.TemplateResponse(request, "ticketDetails.html", {"user": user})
+
+
 @router.get("/communityComplaint")
 def community_complaint(request: Request, user: User = Depends(tenant_only)):
     return templates.TemplateResponse(request, "communityComplaint.html", {"user": user})
