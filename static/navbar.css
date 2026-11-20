@@ -46,3 +46,15 @@
   opacity: 1;
   text-decoration: underline;
 }
+.logout-form {
+  margin: 0;
+}
+
+.nav-logout {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: #ffffff;
+}

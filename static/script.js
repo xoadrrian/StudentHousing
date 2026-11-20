@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const navPlaceholder = document.getElementById("navbar-placeholder");
   if (navPlaceholder) {
     // Check which HTML page is currently open
-    const currentPage = window.location.pathname.split("/").pop();
+    const currentPage = window.location.pathname;
 
     // Highlight "My Tickets" if the user is on myTickets, ticketDetails, or either ticketForm
     const isTicketsSection = [
@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <nav class="nav-links">
             <a href="/home" class="nav-link ${currentPage === "/home" ? "active" : ""}">Home</a>
             <a href="/myTickets" class="nav-link ${isTicketsSection ? "active" : ""}">My Tickets</a>
+            <form method="post" action="/logout" class="logout-form">
+              <button type="submit" class="nav-link nav-logout">Log out</button>
+            </form>
           </nav>
         </div>
       </header>
