@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>House 7 Kitchen</title>
+<script src="mqtt.min.js"></script>
+<style>
+  :root { --bg:#14161a; --card:#1f2329; --fg:#f1f3f5; --muted:#8b929c; --ok:#40c057; --warn:#fab005; --bad:#fa5252; --accent:#4dabf7; }
+  * { box-sizing:border-box; margin:0; }
+  html,body { height:100%; background:var(--bg); color:var(--fg); font-family:system-ui,Segoe UI,Roboto,sans-serif; user-select:none; }
+  body { display:grid; grid-template-rows:auto 1fr auto; gap:14px; padding:16px; }
+  header { display:flex; justify-content:space-between; align-items:center; }
+  h1 { font-size:24px; font-weight:600; }
+  #conn { font-size:14px; color:var(--muted); display:flex; align-items:center; gap:8px; }
+  #conn i { width:10px; height:10px; border-radius:50%; background:var(--bad); }
+  main { display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:1fr 1fr; gap:14px; }
+  .card { background:var(--card); border-radius:16px; padding:16px 18px; display:flex; flex-direction:column; justify-content:space-between; }
+  .label { font-size:15px; color:var(--muted); }
+  .big { font-size:52px; font-weight:600; font-variant-numeric:tabular-nums; }
+  .big small { font-size:20px; color:var(--muted); font-weight:400; margin-left:4px; }
+  .status { font-size:16px; font-weight:600; }
+  #co2card { border-left:10px solid var(--muted); }
+  .target { grid-column:span 2; flex-direction:row; align-items:center; gap:18px; }
+  .target .info { flex:1; }
+  button { width:96px; height:96px; border:none; border-radius:20px; background:#2c323a; color:var(--fg); font-size:48px; font-weight:600; }
+  button:active { background:var(--accent); }
+  footer { font-size:13px; color:var(--muted); text-align:center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>House 7 · Kitchen</h1>
+  <div id="conn"><i></i><span>Connecting…</span></div>
+</header>
+
+<main>
+  <div class="card" id="co2card">
+    <div class="label">Air quality (CO₂)</div>
+    <div class="big"><span id="co2">—</span><small>ppm</small></div>
+    <div class="status" id="co2txt">Waiting for data</div>
+  </div>
+  <div class="card">
+    <div class="label">Temperature</div>
+    <div class="big"><span id="temp">—</span><small>°C</small></div>
+    <div class="status" id="heat">Heating —</div>
+  </div>
+  <div class="card">
+    <div class="label">Humidity</div>
+    <div class="big"><span id="hum">—</span><small>%</small></div>
+    <div class="status" id="humtxt">&nbsp;</div>
+  </div>
+  <div class="card">
+    <div class="label">Room</div>
+    <div class="big" id="pres" style="font-size:34px">—</div>
+    <div class="status" id="updated">&nbsp;</div>
+  </div>
+  <div class="card target">
+    <button id="minus">−</button>
+    <div class="info">
+      <div class="label">Target temperature</div>
+      <div class="big"><span id="sp">21.0</span><small>°C</small></div>
+      <div class="status" style="color:var(--muted)">Tap − or + to change</div>
+    </div>
+    <button id="plus">+</button>
+  </div>
+</main>
+
+<footer>Student Housing B.V. · Smart room demo</footer>
+
+<script>
+const BROKER = 'ws://' + (location.hostname || 'localhost') + ':9001';
+const T_DATA = 'house/7/kitchen/climate', T_SP = 'house/7/kitchen/setpoint';
+const $ = id => document.getElementById(id);
+let sp = 21;
+
+const client = mqtt.connect(BROKER);
+client.on('connect', () => { setConn(true); client.subscribe([T_DATA, T_SP]); });
+client.on('close',   () => setConn(false));
+client.on('message', (topic, buf) => {
+  const txt = buf.toString();
+  if (topic === T_SP) { sp = parseFloat(txt) || sp; $('sp').textContent = sp.toFixed(1); return; }
+  let d; try { d = JSON.parse(txt); } catch { return; }
+  show(d);
+});
+
+function setConn(ok) {
+  $('conn').querySelector('i').style.background = ok ? 'var(--ok)' : 'var(--bad)';
+  $('conn').querySelector('span').textContent = ok ? 'Connected' : 'Not connected';
+}
+
+function show(d) {
+  const c = d.co2;
+  $('co2').textContent = c ?? '—';
+  const [txt, col] = c > 1200 ? ['Ventilate now', 'var(--bad)'] : c >= 800 ? ['Okay, ventilate soon', 'var(--warn)'] : ['Good', 'var(--ok)'];
+  $('co2txt').textContent = txt; $('co2txt').style.color = col; $('co2card').style.borderLeftColor = col;
+
+  $('temp').textContent = d.temp == null ? '—' : d.temp.toFixed(1);
+  $('heat').textContent = d.heating ? 'Heating ON' : 'Heating off';
+  $('heat').style.color = d.heating ? 'var(--warn)' : 'var(--muted)';
+
+  $('hum').textContent = d.hum == null ? '—' : Math.round(d.hum);
+  $('humtxt').textContent = d.hum == null ? '' : d.hum > 70 ? 'Mould risk' : d.hum < 30 ? 'Too dry' : 'Healthy';
+  $('humtxt').style.color = d.hum > 70 || d.hum < 30 ? 'var(--warn)' : 'var(--ok)';
+
+  $('pres').textContent = d.presence ? 'Someone here' : 'Empty';
+  $('updated').textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  if (d.setpoint != null && !client.connected) $('sp').textContent = d.setpoint.toFixed(1);
+}
+
+function change(step) {
+  sp = Math.min(25, Math.max(15, Math.round((sp + step) * 2) / 2));
+  $('sp').textContent = sp.toFixed(1);
+  client.publish(T_SP, sp.toFixed(1), { retain: true });
+}
+$('minus').onclick = () => change(-0.5);
+$('plus').onclick  = () => change(0.5);
+</script>
+</body>
+</html>
