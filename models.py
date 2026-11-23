@@ -73,3 +73,14 @@ class SensorReading(Base):
     co2_ppm: Mapped[int | None]
     temperature_c: Mapped[Decimal | None] = mapped_column(Numeric)
     humidity_pct: Mapped[Decimal | None] = mapped_column(Numeric)
+
+class Ticket(Base):
+    __tablename__ = "ticket"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(Uuid)
+    worker_id: Mapped[uuid.UUID | None] = mapped_column(Uuid)
+    title: Mapped[str] = mapped_column(Text)
+    description: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

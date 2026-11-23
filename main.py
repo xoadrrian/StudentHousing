@@ -12,7 +12,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 import mqtt_listener
 from database import DATABASE_URL, engine, get_db
 from models import Base
-from routers import auth, pages, sensors
+from routers import auth, pages, sensors, tickets
 from routers.auth import HOME_BY_ROLE, get_current_user
 
 if DATABASE_URL.startswith("sqlite"):
@@ -32,10 +32,11 @@ app = FastAPI(title="BV Housing", lifespan=lifespan)
 app.include_router(auth.router)
 app.include_router(pages.router)
 app.include_router(sensors.router)
+app.include_router(tickets.router)
 
 if Path("static").is_dir():
     app.mount("/static", StaticFiles(directory="static"), name="static")
-    
+
 
 @app.exception_handler(StarletteHTTPException)
 async def not_logged_in_goes_to_login(request: Request, exc: StarletteHTTPException):
@@ -56,6 +57,7 @@ def root(request: Request, db: Session = Depends(get_db)):
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
 
 @app.get("/health/mqtt")
 def health_mqtt():
