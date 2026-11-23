@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ].includes(currentPage);
 
     // Takes logged-in user info 
-    const userName = localStorage.getItem("bv_user_name") || "Alexandra G.";
-    const userRole = localStorage.getItem("bv_user_role") || "Tenant";
+    const userName = localStorage.getItem("bv_user_name") || "user-name";
+    const userRole = localStorage.getItem("bv_user_role") || "user-role";
 
     // Automatically generate initials (e.g., "Alexandra G." -> "AG")
     const initials = userName
