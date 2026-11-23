@@ -1,16 +1,13 @@
 // Wait until the HTML page is fully loaded before running any code
 document.addEventListener("DOMContentLoaded", () => {
 
-
-// ==========================================
-  // SHARED NAVIGATION BAR
-  // ==========================================
+ 
+  // NAVIGATION BAR
+  
   const navPlaceholder = document.getElementById("navbar-placeholder");
   if (navPlaceholder) {
-    // Check which HTML page is currently open
     const currentPage = window.location.pathname;
 
-    // Highlight "My Tickets" if the user is on myTickets, ticketDetails, or either ticketForm
     const isTicketsSection = [
       "/myTickets",
       "/ticketDetails",
@@ -18,21 +15,48 @@ document.addEventListener("DOMContentLoaded", () => {
       "/communityComplaint"
     ].includes(currentPage);
 
+    // Takes logged-in user info 
+    const userName = localStorage.getItem("bv_user_name") || "Alexandra G.";
+    const userRole = localStorage.getItem("bv_user_role") || "Tenant";
+
+    // Automatically generate initials (e.g., "Alexandra G." -> "AG")
+    const initials = userName
+      .split(" ")
+      .map(part => part[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+
     navPlaceholder.innerHTML = `
       <header class="navbar">
         <div class="nav-container">
-          <div class="brand">BV Housing</div>
+          
+          <!-- Left: Brand & Log Out -->
+          <div class="nav-left">
+            <div class="brand">BV Housing</div>
+            <form method="post" action="/logout" class="logout-form">
+              <button type="submit" class="nav-logout">Log out</button>
+            </form>
+          </div>
+
+          <!-- Center: Navigation Links -->
           <nav class="nav-links">
             <a href="/home" class="nav-link ${currentPage === "/home" ? "active" : ""}">Home</a>
             <a href="/myTickets" class="nav-link ${isTicketsSection ? "active" : ""}">My Tickets</a>
-            <form method="post" action="/logout" class="logout-form">
-              <button type="submit" class="nav-link nav-logout">Log out</button>
-            </form>
           </nav>
+
+          <!-- Right: User Role, Avatar & Name -->
+          <div class="nav-user">
+            <span class="role-badge">${userRole}</span>
+            <div class="user-avatar">${initials}</div>
+            <span class="user-name">${userName}</span>
+          </div>
+
         </div>
       </header>
     `;
-  }    
+  }
+
 
 
 
