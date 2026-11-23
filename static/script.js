@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function setStatus(id, level, text) {
       const el = document.getElementById(id);
-      el.className = "env-status status-" + level; // good | warning | alert
+      el.className = "env-status status-" + level;
       el.textContent = text;
     }
 
@@ -218,6 +218,20 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Ensures UTC timestamps from Python are parsed properly
+    function parseTimestamp(rawTime) {
+      if (typeof rawTime === "number") {
+        // Handle Unix timestamps (seconds vs milliseconds)
+        return rawTime < 1e12 ? rawTime * 1000 : rawTime;
+      }
+      if (typeof rawTime === "string") {
+        // If no timezone ("Z" or "+01:00") is present, treat it as UTC by adding "Z"
+        const hasTimezone = /Z|[+-]\d{2}:?\d{2}$/.test(rawTime);
+        return new Date(hasTimezone ? rawTime : rawTime + "Z").getTime();
+      }
+      return NaN;
+    }
+
     async function loadEnvironment() {
       try {
         const res = await fetch("/api/sensors/my-room/latest");
@@ -226,16 +240,24 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
         const r = await res.json();
+        console.log("Sensor API response:", r); // Check browser Console (F12) to see exact fields
 
-        // Check how old the reading is using its timestamp
-        const rawTime = r.recorded_at || r.timestamp || r.created_at;
+        // Look for the timestamp field in the JSON response
+        const rawTime =
+          r.recorded_at ||
+          r.timestamp ||
+          r.created_at ||
+          r.updated_at ||
+          r.time ||
+          r.date;
+
         if (rawTime) {
-          const readingTime = new Date(rawTime).getTime();
+          const readingTime = parseTimestamp(rawTime);
           const ageInMinutes = (Date.now() - readingTime) / (1000 * 60);
-          setLiveBadge(ageInMinutes <= MAX_AGE_MINUTES);
+          setLiveBadge(!isNaN(ageInMinutes) && ageInMinutes <= MAX_AGE_MINUTES);
         } else {
-          // If the API returns data without a timestamp field, treat as Live
-          setLiveBadge(true);
+          // If no timestamp exists at all, mark as Outdated instead of guessing Live
+          setLiveBadge(false);
         }
 
         envTemp.textContent = `${Number(r.temperature_c).toFixed(1)} °C`;
@@ -263,7 +285,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     loadEnvironment();
-    setInterval(loadEnvironment, 10000); // refresh every 10 seconds
+    setInterval(loadEnvironment, 10000);
   }
-  
 });
