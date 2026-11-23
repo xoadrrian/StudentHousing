@@ -17,12 +17,43 @@
   align-items: center;
 }
 
+/* Left section: Brand + Log out */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
 .brand {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: 0.2px;
 }
 
+.logout-form {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.nav-logout {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  color: #ffffff;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.nav-logout:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Center section: Links */
 .nav-links {
   display: flex;
   gap: 48px;
@@ -35,6 +66,7 @@
   font-weight: 400;
   opacity: 0.9;
   transition: opacity 0.2s ease;
+  padding-bottom: 4px;
 }
 
 .nav-link:hover {
@@ -44,17 +76,40 @@
 .nav-link.active {
   font-weight: 700;
   opacity: 1;
-  text-decoration: underline;
-}
-.logout-form {
-  margin: 0;
+  border-bottom: 2px solid #ffffff;
 }
 
-.nav-logout {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  font: inherit;
+/* Right section: Role badge + Avatar + Name */
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.role-badge {
+  background-color: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #7c9cc4;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-name {
+  font-size: 0.95rem;
+  font-weight: 400;
   color: #ffffff;
 }
