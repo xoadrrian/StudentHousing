@@ -77,8 +77,6 @@ class SensorReading(Base):
     co2_ppm: Mapped[int | None]
     temperature_c: Mapped[Decimal | None] = mapped_column(Numeric)
     humidity_pct: Mapped[Decimal | None] = mapped_column(Numeric)
-<<<<<<< Updated upstream
-=======
 
 
 class TicketCreate(BaseModel):
@@ -94,4 +92,3 @@ class TicketResponse(BaseModel):
     description: str
     status: str
     created_at: datetime
->>>>>>> Stashed changes

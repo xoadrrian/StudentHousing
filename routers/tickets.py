@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 from fastapi import APIRouter, Form
 from uuid import UUID
 
@@ -23,4 +21,3 @@ def submit_ticket(
             "status": "Open"
         }
     }
->>>>>>> Stashed changes
