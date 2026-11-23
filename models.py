@@ -1,6 +1,5 @@
 import enum
 import uuid
-from uuid import UUID
 from datetime import datetime
 from decimal import Decimal
 
@@ -8,9 +7,6 @@ from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, Numeric, Text,
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
-
-from pydantic import BaseModel
-from typing import Optional
 
 
 class Role(str, enum.Enum):
@@ -78,17 +74,13 @@ class SensorReading(Base):
     temperature_c: Mapped[Decimal | None] = mapped_column(Numeric)
     humidity_pct: Mapped[Decimal | None] = mapped_column(Numeric)
 
+class Ticket(Base):
+    __tablename__ = "ticket"
 
-class TicketCreate(BaseModel):
-    tenant_id: UUID
-    title: str
-    description: str
-
-class TicketResponse(BaseModel):
-    id: int
-    tenant_id: UUID
-    worker_id: Optional[UUID] = None
-    title: str
-    description: str
-    status: str
-    created_at: datetime
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(Uuid)
+    worker_id: Mapped[uuid.UUID | None] = mapped_column(Uuid)
+    title: Mapped[str] = mapped_column(Text)
+    description: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

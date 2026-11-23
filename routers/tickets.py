@@ -1,23 +1,23 @@
-from fastapi import APIRouter, Form
-from uuid import UUID
+from fastapi import APIRouter, Depends, Form
 
-router = APIRouter(
-    prefix="/tickets",
-    tags=["Tickets"]
-)
+from models import Role, User
+from routers.auth import require_role
+
+router = APIRouter(prefix="/tickets", tags=["Tickets"])
+
 
 @router.post("/submit")
 def submit_ticket(
-    tenant_id: UUID = Form(...),
     title: str = Form(...),
-    description: str = Form(...)
+    description: str = Form(...),
+    user: User = Depends(require_role(Role.tenant)),
 ):
     return {
         "message": "Ticket submitted successfully",
         "ticket": {
-            "tenant_id": str(tenant_id),
+            "tenant_id": str(user.id),
             "title": title,
             "description": description,
-            "status": "Open"
-        }
+            "status": "Open",
+        },
     }

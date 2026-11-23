@@ -1,7 +1,6 @@
 fastapi[standard]
 uvicorn
 sqlalchemy
-psycopg-binary
 psycopg[binary]
 python-dotenv
 paho-mqtt
