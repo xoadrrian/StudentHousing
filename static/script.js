@@ -193,22 +193,72 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ==========================================
+// ==========================================
   // ROOM ENVIRONMENT (live sensor data)
   // ==========================================
   const envTemp = document.getElementById("env-temp");
   if (envTemp) {
+    const liveBadge = document.getElementById("sensor-live-status");
+    const MAX_AGE_MINUTES = 5; // Data older than 5 minutes = Outdated
+
     function setStatus(id, level, text) {
       const el = document.getElementById(id);
-      el.className = "env-status status-" + level; // good | warning | alert
+      el.className = "env-status status-" + level;
       el.textContent = text;
+    }
+
+    function setLiveBadge(isLive) {
+      if (!liveBadge) return;
+      if (isLive) {
+        liveBadge.className = "sensor-badge live";
+        liveBadge.textContent = "● Current status";
+      } else {
+        liveBadge.className = "sensor-badge outdated";
+        liveBadge.textContent = "● Outdated status";
+      }
+    }
+
+    // Ensures UTC timestamps from Python are parsed properly
+    function parseTimestamp(rawTime) {
+      if (typeof rawTime === "number") {
+        // Handle Unix timestamps (seconds vs milliseconds)
+        return rawTime < 1e12 ? rawTime * 1000 : rawTime;
+      }
+      if (typeof rawTime === "string") {
+        // If no timezone ("Z" or "+01:00") is present, treat it as UTC by adding "Z"
+        const hasTimezone = /Z|[+-]\d{2}:?\d{2}$/.test(rawTime);
+        return new Date(hasTimezone ? rawTime : rawTime + "Z").getTime();
+      }
+      return NaN;
     }
 
     async function loadEnvironment() {
       try {
         const res = await fetch("/api/sensors/my-room/latest");
-        if (!res.ok) return; // no readings yet: keep "Waiting for sensor..."
+        if (!res.ok) {
+          setLiveBadge(false);
+          return;
+        }
         const r = await res.json();
+        console.log("Sensor API response:", r); // Check browser Console (F12) to see exact fields
+
+        // Look for the timestamp field in the JSON response
+        const rawTime =
+          r.recorded_at ||
+          r.timestamp ||
+          r.created_at ||
+          r.updated_at ||
+          r.time ||
+          r.date;
+
+        if (rawTime) {
+          const readingTime = parseTimestamp(rawTime);
+          const ageInMinutes = (Date.now() - readingTime) / (1000 * 60);
+          setLiveBadge(!isNaN(ageInMinutes) && ageInMinutes <= MAX_AGE_MINUTES);
+        } else {
+          // If no timestamp exists at all, mark as Outdated instead of guessing Live
+          setLiveBadge(false);
+        }
 
         envTemp.textContent = `${Number(r.temperature_c).toFixed(1)} °C`;
         document.getElementById("env-humidity").textContent = `${Math.round(r.humidity_pct)} %`;
@@ -230,11 +280,11 @@ document.addEventListener("DOMContentLoaded", () => {
         else setStatus("env-co2-status", "alert", "Ventilate now");
       } catch (e) {
         console.error("Could not load sensor data", e);
+        setLiveBadge(false);
       }
     }
 
     loadEnvironment();
-    setInterval(loadEnvironment, 30000); // refresh every 30 seconds
+    setInterval(loadEnvironment, 10000);
   }
-  
 });

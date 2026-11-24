@@ -2,10 +2,70 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Manager | BV Housing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BV Housing - Tickets</title>
+  <link rel="stylesheet" href="../static/manager.css" />
 </head>
 <body>
-  <h1>Hello Manager {{ user.first_name }} {{ user.last_name }}</h1>
-  <form method="post" action="/logout"><button type="submit">Log out</button></form>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      
+      <!-- Left: Brand & Log Out -->
+      <div class="nav-left">
+        <div class="brand">BV Housing</div>
+        <form method="post" action="/logout" class="logout-form">
+          <button type="submit" class="nav-logout">Log out</button>
+        </form>
+      </div>
+
+      <!-- Center: Page name -->
+      <nav class="nav-links">
+        <a href="/manager" class="nav-link active">Tickets</a>
+      </nav>
+
+      <!-- Right: User Role, Avatar & Name -->
+      <div class="nav-user">
+        <span class="role-badge">{{"Manager"}}</span>
+        <div class="user-avatar">{{ user.first_name[0] | upper }}</div>
+        <span class="user-name">{{ user.first_name }}</span>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Tickets Content -->
+  <main class="reports-container">
+
+    <!-- Greeting Header -->
+    <section class="welcome-section">
+      <h1>Hello, <span id="user-name">{{ user.first_name }}</span>!</h1>
+    </section>
+    
+    <!-- Two-Column Tickets Section -->
+    <section class="reports-board">
+      <div class="reports-headers">
+        <div class="category-header">
+          <h2>Repair Request</h2>
+        </div>
+        <div class="category-header">
+          <h2>Community Complaints</h2>
+        </div>
+      </div>
+
+      <div class="reports-columns">
+        <div class="report-list" id="maintenance-reports-list">
+          <!-- JS -->
+        </div>
+        <div class="report-list" id="community-reports-list">
+          <!-- JS  -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/static/script.js"></script>
 </body>
 </html>
