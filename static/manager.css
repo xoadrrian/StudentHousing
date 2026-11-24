@@ -1,0 +1,246 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #e4eaf2;
+  color: #2c4c76;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* NAVIGATION BAR */
+.navbar {
+  background-color: #2e4e78;
+  color: #ffffff;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Left: Brand & Log Out */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.logout-form {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.nav-logout {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  color: #ffffff;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.nav-logout:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Center: Page name */
+.nav-links {
+  display: flex;
+  gap: 48px;
+}
+
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.9;
+  padding-bottom: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.nav-link:hover {
+  opacity: 1;
+}
+
+.nav-link.active {
+  font-weight: 700;
+  opacity: 1;
+  border-bottom: 2px solid #ffffff;
+}
+
+/* Right: Role Badge, Avatar & Name */
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.role-badge {
+  background-color: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #7c9cc4;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-name {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+/* MAIN CONTAINER & WELCOME HEADER */
+.reports-container {
+  flex: 1;
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 36px 24px 48px;
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-section {
+  margin-bottom: 28px;
+}
+
+.welcome-section h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #2c4c76;
+}
+
+/* TWO-COLUMN TICKETS */
+.reports-board {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.reports-headers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid #cbd3de;
+  padding-bottom: 14px;
+}
+
+.category-header {
+  text-align: center;
+}
+
+.category-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c4c76;
+}
+
+.reports-columns {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 42px;
+  padding-top: 20px;
+}
+
+.report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* INDIVIDUAL TICKET CARDS */
+.report-item {
+  background-color: #ffffff;
+  border: 1px solid #e0e4e8;
+  border-left: 4px solid #2b6cb0; /* Blue accent for Repair Requests */
+  border-radius: 8px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.report-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e0;
+}
+
+#community-reports-list .report-item {
+  border-left-color: #dd6b20;
+}
+
+.report-item h3 {
+  margin: 0 0 6px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.report-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4a5568;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 720px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .reports-headers,
+  .reports-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .reports-headers {
+    gap: 12px;
+  }
+}
