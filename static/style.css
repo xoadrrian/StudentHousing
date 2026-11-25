@@ -403,7 +403,7 @@ body {
 /* Shared Supplies Table Header */
 .supplies-table-header {
   display: grid;
-  grid-template-columns: 1.4fr 1.4fr 0.7fr;
+  grid-template-columns: 1.4fr 1.4fr 0.7fr 24px;
   border-bottom: 1px solid #d5dce4;
   padding: 0 6px 8px;
   margin-right: 26px;
@@ -610,7 +610,7 @@ body {
 /* ---------- Inventory (shared supplies) ---------- */
 .supply-row {
   display: grid;
-  grid-template-columns: 1.4fr 1.4fr 0.7fr;
+  grid-template-columns: 1.4fr 1.4fr 0.7fr 24px;
   align-items: center;
   padding: 8px 6px;
   border-bottom: 1px solid #ebeff4;
@@ -666,3 +666,31 @@ body {
   color: #234e52;
 }
 
+.supply-who {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.supply-next {
+  font-size: 0.72rem;
+  color: #9ba3ae;
+}
+
+.supply-delete {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: #c0c7d0;
+  cursor: pointer;
+}
+
+.supply-delete:hover {
+  color: #c53030;
+}
+
+#shared-supplies-list,
+.supplies-table-header {
+  margin-right: 0;
+}

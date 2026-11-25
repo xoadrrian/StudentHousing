@@ -240,3 +240,9 @@ body {
 .btn-submit:hover {
   background-color: #bdd5f3;
 }
+
+.form-hint {
+  margin: -2px 0 10px;
+  font-size: 0.78rem;
+  color: #718096;
+}
