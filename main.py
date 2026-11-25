@@ -35,7 +35,7 @@ app.include_router(sensors.router)
 
 if Path("static").is_dir():
     app.mount("/static", StaticFiles(directory="static"), name="static")
-    
+
 
 @app.exception_handler(StarletteHTTPException)
 async def not_logged_in_goes_to_login(request: Request, exc: StarletteHTTPException):
