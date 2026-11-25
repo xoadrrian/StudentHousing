@@ -84,3 +84,20 @@ class Ticket(Base):
     description: Mapped[str] = mapped_column(Text)
     status: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+class Room(Base):
+    __tablename__ = "room"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    building_id: Mapped[int] = mapped_column(Integer)
+    number: Mapped[str] = mapped_column(Text)
+
+class SupplyItem(Base):
+    __tablename__ = "supply_item"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    building_id: Mapped[int] = mapped_column(Integer)
+    name: Mapped[str] = mapped_column(Text)
+    quantity: Mapped[int] = mapped_column(Integer, default=1)
+    responsible_id: Mapped[uuid.UUID | None] = mapped_column(Uuid)
+    status: Mapped[str] = mapped_column(Text, default="in_stock")

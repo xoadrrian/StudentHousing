@@ -12,7 +12,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 import mqtt_listener
 from database import DATABASE_URL, engine, get_db
 from models import Base
-from routers import auth, pages, sensors, tickets
+from routers import auth, pages, sensors, tickets, inventory
 from routers.auth import HOME_BY_ROLE, get_current_user
 
 if DATABASE_URL.startswith("sqlite"):
@@ -33,6 +33,7 @@ app.include_router(auth.router)
 app.include_router(pages.router)
 app.include_router(sensors.router)
 app.include_router(tickets.router)
+app.include_router(inventory.router)
 
 if Path("static").is_dir():
     app.mount("/static", StaticFiles(directory="static"), name="static")

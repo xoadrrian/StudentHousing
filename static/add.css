@@ -194,7 +194,7 @@ body {
   background-color: #e4eefb;
 }
 
-.tenant-pill input[type="checkbox"] {
+.tenant-pill input {
   accent-color: #2e4e78;
   cursor: pointer;
 }
