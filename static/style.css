@@ -607,6 +607,62 @@ body {
   }
 }
 
+/* ---------- Inventory (shared supplies) ---------- */
+.supply-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1.4fr 0.7fr;
+  align-items: center;
+  padding: 8px 6px;
+  border-bottom: 1px solid #ebeff4;
+  font-size: 0.9rem;
+  color: #1a202c;
+}
 
+.supply-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: none;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
 
+.supply-status.in-stock {
+  background-color: #e6fffa;
+  color: #234e52;
+  cursor: pointer;
+}
+
+.supply-status.in-stock:hover {
+  background-color: #fefcbf;
+  color: #744210;
+}
+
+.supply-status.to-buy {
+  background-color: #fed7d7;
+  color: #742a2a;
+}
+
+.to-buy-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.empty-note {
+  color: #9ba3ae;
+  font-size: 0.85rem;
+}
+
+.supply-status.to-buy {
+  cursor: pointer;
+}
+
+.supply-status.to-buy:hover {
+  background-color: #e6fffa;
+  color: #234e52;
+}
 
