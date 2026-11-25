@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================
-  // 4. BONUS: LOGIC FOR TICKET DETAILS PAGE
+  // LOGIC FOR TICKET DETAILS PAGE
   // ==========================================
   const detailsContent = document.getElementById("ticket-details-content");
   if (detailsContent) {

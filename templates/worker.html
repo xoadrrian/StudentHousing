@@ -2,10 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Worker | BV Housing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BV Housing - Worker Tasks</title>
+  <link rel="stylesheet" href="/static/worker.css" />
 </head>
 <body>
-  <h1>Hello Worker {{ user.first_name }} {{ user.last_name }}</h1>
-  <form method="post" action="/logout"><button type="submit">Log out</button></form>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      
+      <!-- Left: Brand & Log Out -->
+      <div class="nav-left">
+        <div class="brand">BV Housing</div>
+        <form method="post" action="/logout" class="logout-form">
+          <button type="submit" class="nav-logout">Log out</button>
+        </form>
+      </div>
+
+      <!-- Right: User Role, Avatar & Name -->
+      <div class="nav-user">
+        <span class="role-badge">{{ "Worker" }}</span>
+        <div class="user-avatar">{{ user.first_name[0] | upper }}</div>
+        <span class="user-name">{{ user.first_name }}</span>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Worker Feed Content -->
+  <main class="worker-container">
+
+    <!-- Greeting Header with Bottom Divider -->
+    <section class="welcome-section">
+      <h1>Hi, <span id="user-name">{{ user.first_name }}</span>!</h1>
+      <p class="subtitle">Your current repair tasks:</p>
+    </section>
+
+    <!-- Tickets Section -->
+    <section class="tasks-grid" id="worker-tickets-list">
+    </section>
+
+  </main>
+
+  <script src="/static/script.js"></script>
 </body>
 </html>
