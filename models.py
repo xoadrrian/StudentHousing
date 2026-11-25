@@ -73,3 +73,31 @@ class SensorReading(Base):
     co2_ppm: Mapped[int | None]
     temperature_c: Mapped[Decimal | None] = mapped_column(Numeric)
     humidity_pct: Mapped[Decimal | None] = mapped_column(Numeric)
+
+class Ticket(Base):
+    __tablename__ = "ticket"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(Uuid)
+    worker_id: Mapped[uuid.UUID | None] = mapped_column(Uuid)
+    title: Mapped[str] = mapped_column(Text)
+    description: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+class Room(Base):
+    __tablename__ = "room"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    building_id: Mapped[int] = mapped_column(Integer)
+    number: Mapped[str] = mapped_column(Text)
+
+class SupplyItem(Base):
+    __tablename__ = "supply_item"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    building_id: Mapped[int] = mapped_column(Integer)
+    name: Mapped[str] = mapped_column(Text)
+    quantity: Mapped[int] = mapped_column(Integer, default=1)
+    responsible_id: Mapped[uuid.UUID | None] = mapped_column(Uuid)
+    status: Mapped[str] = mapped_column(Text, default="in_stock")
