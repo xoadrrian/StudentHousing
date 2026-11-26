@@ -99,7 +99,7 @@ def add_item(
         building_id=building_id,
         name=name,
         quantity=1,
-        responsible_id=people[0] if people else None,
+        responsible_id=people[-1] if people else None,
         status="in_stock",
     )
     item.members = [
@@ -114,8 +114,12 @@ def add_item(
 @router.post("/{item_id}/to-buy")
 def mark_to_buy(item_id: int, user: User = Depends(tenant_only), db: Session = Depends(get_db)):
     item = get_my_item(item_id, user, db)
-    item.status = "to_buy"
-    db.commit()
+    if item.status == "in_stock":
+        item.status = "to_buy"
+        upcoming = next_person(item)
+        if upcoming is not None:
+            item.responsible_id = upcoming
+        db.commit()
     return item_to_dict(item, user, db)
 
 
@@ -124,9 +128,6 @@ def mark_bought(item_id: int, user: User = Depends(tenant_only), db: Session = D
     item = get_my_item(item_id, user, db)
     if item.status == "to_buy":
         item.status = "in_stock"
-        upcoming = next_person(item)
-        if upcoming is not None:
-            item.responsible_id = upcoming
         db.commit()
     return item_to_dict(item, user, db)
 
