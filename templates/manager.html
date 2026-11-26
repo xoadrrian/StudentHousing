@@ -20,11 +20,6 @@
         </form>
       </div>
 
-      <!-- Center: Page name -->
-      <nav class="nav-links">
-        <a href="/manager" class="nav-link active">Tickets</a>
-      </nav>
-
       <!-- Right: User Role, Avatar & Name -->
       <div class="nav-user">
         <span class="role-badge">{{"Manager"}}</span>
@@ -41,13 +36,14 @@
     <!-- Greeting Header -->
     <section class="welcome-section">
       <h1>Hello, <span id="user-name">{{ user.first_name }}</span>!</h1>
+      <p class="subtitle">This are the current tickets:</p>
     </section>
     
     <!-- Two-Column Tickets Section -->
     <section class="reports-board">
       <div class="reports-headers">
         <div class="category-header">
-          <h2>Repair Request</h2>
+          <h2>Repair Requests</h2>
         </div>
         <div class="category-header">
           <h2>Community Complaints</h2>

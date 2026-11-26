@@ -1,0 +1,197 @@
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #e4eaf2;
+  color: #2c4c76;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+  /* TOP NAVIGATION BAR */
+.navbar {
+  background-color: #2e4e78;
+  color: #ffffff;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Left: Brand & Log Out */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.logout-form {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.nav-logout {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  color: #ffffff;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.nav-logout:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Right: Role Badge, Avatar & Name */
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.role-badge {
+  background-color: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #7c9cc4;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-name {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+
+
+/* MAIN CONTAINER & GREETING HEADER */
+.worker-container {
+  flex: 1;
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 42px 24px 60px;
+}
+
+.welcome-section {
+  border-bottom: 1px solid #cbd3de;
+  padding-bottom: 14px;
+  margin-bottom: 28px;
+}
+
+.welcome-section h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #2c4c76;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #2c4c76;
+}
+
+
+
+
+/* SINGLE UNIFIED TICKET CARDS GRID */
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px 48px;
+  padding: 0 24px;
+}
+
+.report-item {
+  background-color: #ffffff;
+  border: 1px solid #e0e4e8;
+  border-left: 4px solid #2e4e78;
+  border-radius: 8px;
+  padding: 20px 24px;
+  min-height: 115px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.report-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
+  border-color: #cbd5e0;
+}
+
+.report-item h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2c4c76;
+}
+
+.report-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4a5568;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 720px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .tasks-grid {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+}
