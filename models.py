@@ -101,3 +101,15 @@ class SupplyItem(Base):
     quantity: Mapped[int] = mapped_column(Integer, default=1)
     responsible_id: Mapped[uuid.UUID | None] = mapped_column(Uuid)
     status: Mapped[str] = mapped_column(Text, default="in_stock")
+    members: Mapped[list["SupplyItemMember"]] = relationship(
+        order_by="SupplyItemMember.position",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+
+class SupplyItemMember(Base):
+    __tablename__ = "supply_item_member"
+
+    item_id: Mapped[int] = mapped_column(ForeignKey("supply_item.id", ondelete="CASCADE"), primary_key=True)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True)
+    position: Mapped[int] = mapped_column(Integer)
