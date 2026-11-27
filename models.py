@@ -85,6 +85,15 @@ class Ticket(Base):
     status: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
+class TicketPhoto(Base):
+    __tablename__ = "ticket_photo"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ticket_id: Mapped[int] = mapped_column(ForeignKey("ticket.id"))
+    storage_path: Mapped[str] = mapped_column(Text)
+    uploaded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    
+
 class Room(Base):
     __tablename__ = "room"
 
