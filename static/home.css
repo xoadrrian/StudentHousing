@@ -694,3 +694,138 @@ body {
 .supplies-table-header {
   margin-right: 0;
 }
+
+/* ---------- Chores ---------- */
+.chore-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 0.8fr 24px;
+  align-items: center;
+  padding: 8px 6px;
+  border-bottom: 1px solid #ebeff4;
+  font-size: 0.9rem;
+  color: #1a202c;
+}
+
+.chore-mine {
+  font-weight: 700;
+  color: #2c4c76;
+}
+
+.chore-state {
+  justify-self: start;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.chore-state.open {
+  background-color: #e4eefb;
+  color: #2c4c76;
+}
+
+.chore-state.upcoming {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.chore-state.done {
+  background-color: #e6fffa;
+  color: #234e52;
+}
+
+.chore-state.overdue {
+  background-color: #fed7d7;
+  color: #742a2a;
+}
+
+.todo-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.todo-due {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.todo-due.overdue {
+  color: #c53030;
+  font-weight: 700;
+}
+
+/* ---------- Chores: week navigation, day dots, sub-lines ---------- */
+.week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -10px 26px 6px 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.week-arrow {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 2px 8px;
+  color: #2c4c76;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.week-arrow:hover {
+  background-color: #f2f6fb;
+}
+
+.day-dots {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+  min-height: 6px;
+}
+
+.day-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #cbd5e1;
+}
+
+.day-dot.open { background-color: #3b82f6; }
+.day-dot.done { background-color: #10b981; }
+.day-dot.overdue { background-color: #e53e3e; }
+
+.chore-sub {
+  display: block;
+  font-size: 0.72rem;
+  color: #9ba3ae;
+  margin-top: 1px;
+}
+
+.chore-row .chore-main,
+.chore-row .chore-who {
+  line-height: 1.25;
+}
+
+/* Today: date in a dark-blue circle */
+.day-item.today .day-name {
+  color: #2c4c76;
+}
+
+.day-item.today .day-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #2c4c76;
+  color: #ffffff;
+}

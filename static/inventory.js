@@ -167,6 +167,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Save: send the form to the backend, then go back home
     addForm.addEventListener("submit", async (event) => {
       event.preventDefault();
+
+      // Check first: at least one person ticked
+      const peopleError = document.getElementById("people-error");
+      const hasPerson = pills.querySelector("input:checked") !== null;
+      if (peopleError) peopleError.hidden = hasPerson;
+      if (!hasPerson) return;
+
       const res = await fetch("/api/inventory", {
         method: "POST",
         body: new FormData(addForm),
