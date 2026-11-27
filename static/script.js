@@ -1,13 +1,10 @@
 // Wait until the HTML page is fully loaded before running any code
 document.addEventListener("DOMContentLoaded", () => {
 
- 
   // NAVIGATION BAR
-  
   const navPlaceholder = document.getElementById("navbar-placeholder");
   if (navPlaceholder) {
     const currentPage = window.location.pathname;
-
     const isTicketsSection = [
       "/myTickets",
       "/ticketDetails",
@@ -15,9 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
       "/communityComplaint"
     ].includes(currentPage);
 
-    // Takes logged-in user info 
-    const userName = localStorage.getItem("bv_user_name") || "user-name";
-    const userRole = localStorage.getItem("bv_user_role") || "user-role";
+    // Takes logged-in user info from data attributes and renders the navigation bar dynamically
+    const userName = navPlaceholder.dataset.name;
+    const userRole = navPlaceholder.dataset.role;
 
     // Automatically generate initials (e.g., "Alexandra G." -> "AG")
     const initials = userName
@@ -33,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
           
           <!-- Left: Brand & Log Out -->
           <div class="nav-left">
-            <div class="brand">BV Housing</div>
+            <a href="/" class="brand">BV Housing</a>
             <form method="post" action="/logout" class="logout-form">
               <button type="submit" class="nav-logout">Log out</button>
             </form>
@@ -57,9 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
-
-
-
   //  Get existing tickets from browser memory (or an empty list if none exist yet)
   function getTickets() {
     const saved = localStorage.getItem("bv_tickets");
@@ -73,9 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("bv_tickets", JSON.stringify(tickets));
   }
 
-  
   // 1. LOGIC FOR TICKET FORM 1 (REPAIR REQUEST)
-
   const maintenanceForm = document.getElementById("maintenance-form");
   if (maintenanceForm) {
     maintenanceForm.addEventListener("submit", (event) => {
