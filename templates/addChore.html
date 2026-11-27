@@ -14,7 +14,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BV Housing - Add Chore</title>
-  <link rel="stylesheet" href="/static/addChore.css" />
 </head>
 <body>
 
@@ -44,14 +43,15 @@
             <button type="button" class="text-btn" id="btn-select-all">[Select All]</button>
           </div>
 
-          <!-- JS will populate tenant pills here -->
           <div class="tenant-grid" id="tenant-pills-container">
-            <!-- Example of what JS inserts:
+            {% for tenant in tenants %}
             <label class="tenant-pill">
-              <input type="checkbox" name="tenants" value="1" />
-              <span>Alex</span>
+              <input type="checkbox" name="tenants" value="{{ tenant.id }}" />
+              <span>{{ tenant.first_name }} {{ tenant.last_name }}</span>
             </label>
-            -->
+            {% else %}
+            <p>No tenants found.</p>
+            {% endfor %}
           </div>
         </div>
 

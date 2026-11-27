@@ -1,7 +1,10 @@
 from fastapi import APIRouter, Depends, Request
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
-from models import Role, User
+from database import get_db
+from models import Role, Tenant, User
 from routers.auth import require_role
 
 router = APIRouter()
@@ -26,8 +29,20 @@ def add_item(request: Request, user: User = Depends(tenant_only)):
 
 
 @router.get("/addChore")
-def add_chore(request: Request, user: User = Depends(tenant_only)):
-    return templates.TemplateResponse(request, "addChore.html", {"user": user})
+def add_chore(
+    request: Request,
+    user: User = Depends(tenant_only),
+    db: Session = Depends(get_db),
+):
+    tenants = db.scalars(
+        select(User)
+        .join(Tenant)
+        .where(~User.manager.has(), ~User.worker.has())
+        .order_by(User.first_name, User.last_name)
+    ).all()
+    return templates.TemplateResponse(
+        request, "addChore.html", {"user": user, "tenants": tenants}
+    )
 
 
 @router.get("/ticketDetails")
