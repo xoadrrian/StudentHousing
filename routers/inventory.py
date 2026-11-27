@@ -90,6 +90,8 @@ def add_item(
     building_id = my_building_id(user, db)
 
     people = list(dict.fromkeys(member_ids))  # remove doubles, keep the order
+    if not people:
+        raise HTTPException(400, "Pick at least one person")
     for person_id in people:
         tenant = db.get(Tenant, person_id)
         if tenant is None or db.get(Room, tenant.room_id).building_id != building_id:

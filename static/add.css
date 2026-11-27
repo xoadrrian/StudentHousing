@@ -246,3 +246,21 @@ body {
   font-size: 0.78rem;
   color: #718096;
 }
+
+.form-error {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c53030;
+}
+
+/* The 7 day buttons fit on one line */
+#weekday-pills {
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+#weekday-pills .tenant-pill {
+  padding: 6px 8px;
+  gap: 4px;
+}

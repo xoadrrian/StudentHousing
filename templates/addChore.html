@@ -5,17 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BV Housing - Add Chore</title>
   <link rel="stylesheet" href="/static/navbar.css" />
-  <link rel="stylesheet" href="/static/add.css" />
-</head>
-<body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BV Housing - Add Chore</title>
-  <link rel="stylesheet" href="/static/addChore.css" />
-</head>
+  <link rel="stylesheet" href="/static/add.css" /></head>
 <body>
 
   <!-- Navigation Bar -->
@@ -40,36 +30,33 @@
         <!-- Assigned Tenants (Compact Pill Grid) -->
         <div class="form-group">
           <div class="label-row">
-            <label>Assigned Tenants</label>
+            <label>Who takes turns?</label>
             <button type="button" class="text-btn" id="btn-select-all">[Select All]</button>
           </div>
 
           <!-- JS will populate tenant pills here -->
-          <div class="tenant-grid" id="tenant-pills-container">
-            <!-- Example of what JS inserts:
-            <label class="tenant-pill">
-              <input type="checkbox" name="tenants" value="1" />
-              <span>Alex</span>
-            </label>
-            -->
+                    <div class="tenant-grid" id="tenant-pills-container">
           </div>
+          <p class="form-hint">They take turns in this order, one per day it's due.</p>
+          <p class="form-error" id="people-error" hidden>Pick at least one person.</p>
         </div>
 
-        <!-- Due Date -->
+        <!-- Repeats on (days of the week) -->
         <div class="form-group">
-          <label for="chore-due-date">Due Date</label>
-          <input type="date" id="chore-due-date" name="dueDate" required />
-        </div>
-
-        <!-- Recurring Dropdown -->
-        <div class="form-group">
-          <label for="chore-recurring">Recurring</label>
-          <select id="chore-recurring" name="recurring">
-            <option value="none" selected>None</option>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-          </select>
+          <div class="label-row">
+            <label>Repeats on</label>
+            <button type="button" class="text-btn" id="btn-every-day">[Every day]</button>
+          </div>
+          <div class="tenant-grid" id="weekday-pills">
+            <label class="tenant-pill"><input type="checkbox" name="weekdays" value="0" /><span>Mo</span></label>
+            <label class="tenant-pill"><input type="checkbox" name="weekdays" value="1" /><span>Tu</span></label>
+            <label class="tenant-pill"><input type="checkbox" name="weekdays" value="2" /><span>We</span></label>
+            <label class="tenant-pill"><input type="checkbox" name="weekdays" value="3" /><span>Th</span></label>
+            <label class="tenant-pill"><input type="checkbox" name="weekdays" value="4" /><span>Fr</span></label>
+            <label class="tenant-pill"><input type="checkbox" name="weekdays" value="5" /><span>Sa</span></label>
+            <label class="tenant-pill"><input type="checkbox" name="weekdays" value="6" /><span>Su</span></label>
+          </div>
+          <p class="form-error" id="days-error" hidden>Pick at least one day.</p>
         </div>
 
         <!-- Bottom Buttons -->
@@ -82,5 +69,6 @@
   </main>
 
  <script src="/static/script.js"></script>
+ <script src="/static/chores.js"></script>
 </body>
 </html>

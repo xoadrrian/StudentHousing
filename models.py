@@ -1,9 +1,9 @@
 import enum
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 
-from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, Numeric, Text, Uuid
+from sqlalchemy import BigInteger, Date, DateTime, ForeignKey, Integer, Numeric, Text, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
@@ -113,3 +113,41 @@ class SupplyItemMember(Base):
     item_id: Mapped[int] = mapped_column(ForeignKey("supply_item.id", ondelete="CASCADE"), primary_key=True)
     tenant_id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True)
     position: Mapped[int] = mapped_column(Integer)
+
+#Chores tables
+class Chore(Base):
+    __tablename__ = "chore"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    building_id: Mapped[int] = mapped_column(Integer)
+    title: Mapped[str] = mapped_column(Text)
+    weekdays: Mapped[str] = mapped_column(Text, default="")
+    
+    members: Mapped[list["ChoreMember"]] = relationship(
+        order_by="ChoreMember.position",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+    turns: Mapped[list["ChoreAssignment"]] = relationship(
+        order_by="ChoreAssignment.due_date",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+
+
+class ChoreMember(Base):
+    __tablename__ = "chore_member"
+
+    chore_id: Mapped[int] = mapped_column(ForeignKey("chore.id", ondelete="CASCADE"), primary_key=True)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True)
+    position: Mapped[int] = mapped_column(Integer)
+
+
+class ChoreAssignment(Base):
+    __tablename__ = "chore_assignment"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    chore_id: Mapped[int] = mapped_column(ForeignKey("chore.id", ondelete="CASCADE"))
+    tenant_id: Mapped[uuid.UUID] = mapped_column(Uuid)
+    due_date: Mapped[date] = mapped_column(Date)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

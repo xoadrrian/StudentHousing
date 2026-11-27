@@ -92,6 +92,13 @@
           <button type="button" class="btn-add" id="btn-add-chore" onclick="window.location.href='/addChore'">+ Add Chore</button>
         </div>
 
+        <!-- Week navigation -->
+        <div class="week-nav">
+          <button type="button" class="week-arrow" id="week-prev" aria-label="Previous week">‹</button>
+          <span id="week-label"></span>
+          <button type="button" class="week-arrow" id="week-next" aria-label="Next week">›</button>
+        </div>
+
         <!-- 7-Day calendar-->
         <div class="week-selector" id="week-selector">
           <button type="button" class="day-item" data-day="MO">
@@ -184,5 +191,6 @@
 
   <script src="/static/script.js"></script>
   <script src="/static/inventory.js"></script>
+  <script src="/static/chores.js"></script>
 </body>
 </html>
