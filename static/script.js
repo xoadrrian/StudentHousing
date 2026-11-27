@@ -77,40 +77,51 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1. LOGIC FOR TICKET FORM 1 (REPAIR REQUEST)
 
   const maintenanceForm = document.getElementById("maintenance-form");
-  if (maintenanceForm) {
-    maintenanceForm.addEventListener("submit", (event) => {
-      event.preventDefault(); // Stop the page from reloading before we save
 
-      const title = document.getElementById("title").value;
-      const description = document.getElementById("description").value;
-      const imageInput = document.getElementById("image");
+if (maintenanceForm) {
+  maintenanceForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-      // Function to finish saving and redirect
-      const finishSaving = (imageDataUrl = "") => {
-        const ticket = {
-          id: Date.now(), // Creates a unique ID using the current timestamp
-          title: title,
-          description: description,
-          category: "Repair Request",
-          image: imageDataUrl
-        };
+    const formData = new FormData();
 
-        saveTicket(ticket);
-        window.location.href = "/myTickets"; // Go to My Tickets page
-      };
+    formData.append(
+      "title",
+      document.getElementById("title").value
+    );
 
-      // Check if the user attached an image
-      if (imageInput.files && imageInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          finishSaving(e.target.result); // Save with image
-        };
-        reader.readAsDataURL(imageInput.files[0]);
+    formData.append(
+      "description",
+      document.getElementById("description").value
+    );
+
+    const imageFile =
+    document.getElementById("image").files[0];
+
+console.log("Image file:", imageFile);
+
+if (imageFile) {
+    console.log("Appending image:", imageFile.name);
+    formData.append("image", imageFile);
+}
+
+    try {
+      const response = await fetch("/tickets/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      if (response.ok) {
+        alert("Ticket submitted successfully");
+        window.location.href = "/myTickets";
       } else {
-        finishSaving(); // Save without image
+        alert("Ticket submission failed");
       }
-    });
-  }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred");
+    }
+  });
+}
 
  
   // 2. LOGIC FOR TICKET FORM 2 (COMMUNITY)
@@ -196,15 +207,16 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================
   // ROOM ENVIRONMENT (live sensor data)
   // ==========================================
-  const envTemp = document.getElementById("env-temp");
+    const envTemp = document.getElementById("env-temp");
   if (envTemp) {
     const liveBadge = document.getElementById("sensor-live-status");
-    const MAX_AGE_MINUTES = 5; // Data older than 5 minutes = Outdated
+    const MAX_AGE_MINUTES = 10; // Data older than 5 minutes = Outdated
 
     function setStatus(id, level, text) {
       const el = document.getElementById(id);
       el.className = "env-status status-" + level;
       el.textContent = text;
+      el.hidden = false;
     }
 
     function setLiveBadge(isLive) {
@@ -214,22 +226,25 @@ document.addEventListener("DOMContentLoaded", () => {
         liveBadge.textContent = "● Current status";
       } else {
         liveBadge.className = "sensor-badge outdated";
-        liveBadge.textContent = "● Outdated status";
+        liveBadge.textContent = "Outdated status";
       }
     }
 
-    // Ensures UTC timestamps from Python are parsed properly
+    // Read the time as UTC, even if the time zone is missing
     function parseTimestamp(rawTime) {
-      if (typeof rawTime === "number") {
-        // Handle Unix timestamps (seconds vs milliseconds)
-        return rawTime < 1e12 ? rawTime * 1000 : rawTime;
-      }
-      if (typeof rawTime === "string") {
-        // If no timezone ("Z" or "+01:00") is present, treat it as UTC by adding "Z"
-        const hasTimezone = /Z|[+-]\d{2}:?\d{2}$/.test(rawTime);
-        return new Date(hasTimezone ? rawTime : rawTime + "Z").getTime();
-      }
-      return NaN;
+      if (typeof rawTime !== "string") return NaN;
+      const hasTimezone = /Z|[+-]\d{2}:?\d{2}$/.test(rawTime);
+      return new Date(hasTimezone ? rawTime : rawTime + "Z").getTime();
+    }
+
+    // Hide all numbers and labels when there is no fresh reading
+    function hideReadings() {
+      envTemp.textContent = "-- °C";
+      document.getElementById("env-humidity").textContent = "-- %";
+      document.getElementById("env-co2").textContent = "-- ppm";
+      ["env-temp-status", "env-humidity-status", "env-co2-status"].forEach((id) => {
+        document.getElementById(id).hidden = true;
+      });
     }
 
     async function loadEnvironment() {
@@ -237,27 +252,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const res = await fetch("/api/sensors/my-room/latest");
         if (!res.ok) {
           setLiveBadge(false);
+          hideReadings();
           return;
         }
         const r = await res.json();
-        console.log("Sensor API response:", r); // Check browser Console (F12) to see exact fields
 
-        // Look for the timestamp field in the JSON response
-        const rawTime =
-          r.recorded_at ||
-          r.timestamp ||
-          r.created_at ||
-          r.updated_at ||
-          r.time ||
-          r.date;
-
-        if (rawTime) {
-          const readingTime = parseTimestamp(rawTime);
-          const ageInMinutes = (Date.now() - readingTime) / (1000 * 60);
-          setLiveBadge(!isNaN(ageInMinutes) && ageInMinutes <= MAX_AGE_MINUTES);
-        } else {
-          // If no timestamp exists at all, mark as Outdated instead of guessing Live
-          setLiveBadge(false);
+        // How old is this reading? (measured_at comes from the database)
+        const ageInMinutes = (Date.now() - parseTimestamp(r.measured_at)) / (1000 * 60);
+        const isLive = !isNaN(ageInMinutes) && ageInMinutes <= MAX_AGE_MINUTES;
+        setLiveBadge(isLive);
+        if (!isLive) {
+          hideReadings();
+          return;
         }
 
         envTemp.textContent = `${Number(r.temperature_c).toFixed(1)} °C`;
@@ -281,6 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (e) {
         console.error("Could not load sensor data", e);
         setLiveBadge(false);
+        hideReadings();
       }
     }
 
