@@ -1,5 +1,25 @@
+# Local environment variables and secrets
 .env
+.env.*
+!.env.example
+
+# Virtual environments
 .venv/
+venv/
+
+# Python bytecode
 __pycache__/
+*.py[cod]
+
+# Local SQLite databases
 local.db
 *.db
+*.sqlite
+*.sqlite3
+
+# Test cache
+.pytest_cache/
+
+# Local-only tests (kept off the shared repo)
+tests/test_auth.py
+tests/pytest.ini

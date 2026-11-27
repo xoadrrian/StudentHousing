@@ -31,14 +31,24 @@ This is the EN11 group 1 GitHub repo for our project - Website for student housi
    You'll see `(.venv)` in the terminal.
    and VS Code activates it automatically in every new terminal.
 
-5. **Install the packages.**
+5. **Install the packages.** From the project folder:
 
-   pip install fastapi uvicorn sqlalchemy psycopg2-binary python-dotenv
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   This installs:
 
    - `fastapi`: the web framework
    - `uvicorn`: runs the server
-   - `sqlalchemy` + `psycopg2-binary`: talk to the database
+   - `sqlalchemy` + `psycopg[binary]`: connect to the database
    - `python-dotenv`: reads `.env`
+   - `paho-mqtt`: connects the app to MQTT
+   - `jinja2`: renders the HTML templates
+   - `httpx`: makes OAuth HTTP requests
+   - `pyjwt`: creates and validates JWT tokens
+   - `flask`: runs the Raspberry Pi HTTP logger
+   - `pytest`: runs the test suite
 
 6. **Create the `.env` file** in the main folder with the link the team sends you:
    Will be sent later
