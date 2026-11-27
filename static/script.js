@@ -77,40 +77,51 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1. LOGIC FOR TICKET FORM 1 (REPAIR REQUEST)
 
   const maintenanceForm = document.getElementById("maintenance-form");
-  if (maintenanceForm) {
-    maintenanceForm.addEventListener("submit", (event) => {
-      event.preventDefault(); // Stop the page from reloading before we save
 
-      const title = document.getElementById("title").value;
-      const description = document.getElementById("description").value;
-      const imageInput = document.getElementById("image");
+if (maintenanceForm) {
+  maintenanceForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-      // Function to finish saving and redirect
-      const finishSaving = (imageDataUrl = "") => {
-        const ticket = {
-          id: Date.now(), // Creates a unique ID using the current timestamp
-          title: title,
-          description: description,
-          category: "Repair Request",
-          image: imageDataUrl
-        };
+    const formData = new FormData();
 
-        saveTicket(ticket);
-        window.location.href = "/myTickets"; // Go to My Tickets page
-      };
+    formData.append(
+      "title",
+      document.getElementById("title").value
+    );
 
-      // Check if the user attached an image
-      if (imageInput.files && imageInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          finishSaving(e.target.result); // Save with image
-        };
-        reader.readAsDataURL(imageInput.files[0]);
+    formData.append(
+      "description",
+      document.getElementById("description").value
+    );
+
+    const imageFile =
+    document.getElementById("image").files[0];
+
+console.log("Image file:", imageFile);
+
+if (imageFile) {
+    console.log("Appending image:", imageFile.name);
+    formData.append("image", imageFile);
+}
+
+    try {
+      const response = await fetch("/tickets/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      if (response.ok) {
+        alert("Ticket submitted successfully");
+        window.location.href = "/myTickets";
       } else {
-        finishSaving(); // Save without image
+        alert("Ticket submission failed");
       }
-    });
-  }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred");
+    }
+  });
+}
 
  
   // 2. LOGIC FOR TICKET FORM 2 (COMMUNITY)
