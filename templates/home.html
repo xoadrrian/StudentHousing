@@ -9,12 +9,12 @@
 </head>
 <body>
 
-  <!-- Navigation Bar -->
- <div id="navbar-placeholder"></div>
+  <!-- Navigation Bar Using data attributes to pass user info to JS for dynamic rendering -->
+  {% include "_navbar.html" %}
 
   <!-- Main Dashboard Content -->
   <main class="main-container">
-    
+
     <!-- Greeting Header -->
     <section class="welcome-section">
       <h1>Hello, <span id="user-name">{{ user.first_name }}</span>!</h1>
@@ -63,7 +63,7 @@
 
     <!-- Bottom Shared Columns -->
     <div class="bottom-grid">
-      
+
       <!-- Shared Supplies Cards -->
       <section class="card panel-card">
 
@@ -147,7 +147,7 @@
     <!-- Room Environment Card (Temperature, Humidity, CO2) -->
     <section class="card environment-card">
       <div class="env-grid">
-        
+
         <!-- Temperature -->
         <div class="env-item">
           <div class="env-header">
@@ -186,7 +186,7 @@
 
 
 
-    
+
   </main>
 
   <script src="/static/script.js"></script>

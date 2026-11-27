@@ -1,0 +1,8 @@
+{# Shared navbar partial. Include it in each page that uses the shared navbar.
+
+   The placeholder div carries the server-side user to the browser via
+   data-* attributes. Note user.role.value -> "tenant" (NOT "Role.tenant"). #}
+<div id="navbar-placeholder"
+     data-name="{{ user.first_name }} {{ user.last_name }}"
+     data-role="{{ user.role.value }}"
+     ></div>
